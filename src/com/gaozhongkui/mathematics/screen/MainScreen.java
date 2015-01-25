@@ -39,6 +39,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private static final int InitColumnCount=10;
 	private static final int InitLineCount=4;
 	private static final int STARTGAME=1026;
+	private static final int GameOver=1022;
 	private static final int ALLRUNDICEACTOR=1028;
 	private static final int RUNDICEACTOR=1030;
 	public  static final int NEXTLINE=1032;
@@ -125,26 +126,40 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 					}
 				}else if(NEXTLINE==arg0.what){
 					mFristDiceActors.remove(0);
-					if(mFristDiceActors.isEmpty()){
-						int j=0;
-						for(j=0;j<InitColumnCount;j++){
-							int figure=MathUtils.random(1, getLevelCountToRange());
-							DiceActor diceActor=new DiceActor(figure, j);
-							Message message=mMainHandler.obtainMessage();
-							message.what=STARTGAME;
-							message.obj=diceActor;
-							message.sendToTarget();
-							SystemClock.sleep(STARTPAUSETIME);
-						}
-						if(j>=InitColumnCount){
-							for(j=0;j<InitColumnCount;j++){
-								Message message=mMainHandler.obtainMessage();
-								message.what=RUNDICEACTOR;
-								message.arg1=j;
-								message.sendToTarget();
-							}
+					boolean pand=false;
+					for(int i=0;i<mDiceActors[0].length;i++){
+						if(mDiceActors[i][0]){
+							pand=true;
+							break;
 						}
 					}
+					if(mFristDiceActors.isEmpty()){
+						if(!pand){
+							int j=0;
+							for(j=0;j<InitColumnCount;j++){
+								int figure=MathUtils.random(1, getLevelCountToRange());
+								DiceActor diceActor=new DiceActor(figure, j);
+								Message message=mMainHandler.obtainMessage();
+								message.what=STARTGAME;
+								message.obj=diceActor;
+								message.sendToTarget();
+								SystemClock.sleep(STARTPAUSETIME);
+							}
+							if(j>=InitColumnCount){
+								for(j=0;j<InitColumnCount;j++){
+									Message message=mMainHandler.obtainMessage();
+									message.what=RUNDICEACTOR;
+									message.arg1=j;
+									message.sendToTarget();
+								}
+							}
+						}else{
+							mHandler.sendEmptyMessage(GameOver);
+						}
+						
+					}
+				}else if(GameOver==arg0.what){
+					System.out.println("ÓÎÏ·½áÊø");
 				}
 				return false;
 			}

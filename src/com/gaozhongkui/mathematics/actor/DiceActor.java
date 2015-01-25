@@ -67,7 +67,7 @@ public class DiceActor extends BaseActor {
 	}
     public void runAction(boolean isfrist){
     	int count=0;
-    	for(int i=9;i>mLineX;i--){
+    	for(int i=9;i>=mLineX;i--){
     	 boolean pand=mDiceActors[mPostion][i];
     	  if(!pand){
     		  mDiceActors[mPostion][i]=true;
