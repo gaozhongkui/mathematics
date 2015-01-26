@@ -31,6 +31,9 @@ public class DiceActor extends BaseActor {
 	private int     mFigure;
 	private int     mPostion;
 	private boolean isRun;
+	private boolean isError;
+	protected float mErrorDuration = 0;
+	protected float mErrorPercent = 0;
 	public DiceActor(int figure,int postion) {
 		super();
 		mFigure=figure;
@@ -44,6 +47,7 @@ public class DiceActor extends BaseActor {
 	protected void initView() {
       initListener();
       setSize(mBorderWidth, mBorderHeight);
+      mErrorDuration=0.8f;
 	}
 	private void initListener(){
 		addListener(new InputListener(){
@@ -51,9 +55,9 @@ public class DiceActor extends BaseActor {
 	    	public boolean touchDown(InputEvent event, float x, float y,
 	    			int pointer, int button) {
 	    		   if(MainScreen.isClick){
+	    			   clickDisappear(); 
 	    			   isDown=true;
 		    		   mCacheTexture=mBorderDigital;
-		    		   clickDisappear(); 
 	    		   }
 	    		return true;
 	    	}
@@ -68,9 +72,11 @@ public class DiceActor extends BaseActor {
 	protected void drawChild(Batch batch, float parentAlpha) {
 		if(mCacheTexture!=null){
 			batch.draw(mCacheTexture, getX(), getY());
-			if(isDown){
+			if(isDown&&!isError){
 	          batch.draw(mCacheDigitalTexture, getX()+(getWidth()/2-mCacheDigitalTexture.getWidth()/2), getY()+(getHeight()/2-mCacheDigitalTexture.getHeight()/2));
-	        }	  
+	        }else{
+	        	
+	        }
 		}
       
 	}
@@ -123,11 +129,15 @@ public class DiceActor extends BaseActor {
 				float p=mPercent/mDuration;
 				setY(mStartPoint.y-mIntervalDistance*p);
 			}
+			
+			
+			if(isError){
+				mErrorPercent+=arg0;
+			}
 		}
 	}
 	
 	public void removeDice(){
-		clear();
 		remove();
 	}
 	@Override
