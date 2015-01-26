@@ -31,16 +31,19 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	public static Texture[] mDigitals;
 	public static Texture mBorderDigital;
 	public static Texture mError;
+	public static boolean isClick;
 	public static Boolean[][]  mDiceActors=null;
 	public static List<DiceActor>  mSelectDiceActors=new ArrayList<DiceActor>();
 	public static List<DiceActor>  mShowDiceActors=new ArrayList<DiceActor>();
 	private static List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
+	private static List<DiceActor> mDeleteActors=new ArrayList<DiceActor>();
 	public static int   mCalculationCount=0; 
 	private static final int InitColumnCount=10;
 	private static final int InitLineCount=4;
 	private static final int STARTGAME=1026;
 	private static final int GameOver=1022;
-	private static final int ALLRUNDICEACTOR=1028;
+	private static final int ShowNumber=1022;
+	public static final int ALLRUNDICEACTOR=1028;
 	private static final int RUNDICEACTOR=1030;
 	public  static final int NEXTLINE=1032;
 	private static int STARTPAUSETIME=200;
@@ -54,28 +57,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     private BaseButton mStartBut;
     private HandlerThread mHandlerThread=new HandlerThread("gaozhongkui");
     public static Handler       mHandler;
-    private Handler       mMainHandler=new Handler(GameUtils.getInstance().getContext().getMainLooper(), new Handler.Callback() {
-		
-		@Override
-		public boolean handleMessage(Message arg0) {
-			if(STARTGAME==arg0.what){              //添加
-				 DiceActor diceActor=(DiceActor) arg0.obj;
-				 mBackgroudStage.addActor(diceActor); 
-				 mShowDiceActors.add(diceActor);
-				 mFristDiceActors.add(diceActor);
-			}else if(ALLRUNDICEACTOR==arg0.what){   //所有运行
-				for(int i=(mShowDiceActors.size()-1);i>0;i--){
-					mShowDiceActors.get(i).runAction(false);
-				}
-				mShowDiceActors.clear();
-			}else if(RUNDICEACTOR==arg0.what){   //单个运行
-				DiceActor diceActor=mFristDiceActors.get(arg0.arg1);
-				diceActor.runAction(true);
-			}
-			
-			return false;
-		}
-	});
+    public static  Handler       mMainHandler;
 	@Override
 	protected void init() {
 		mBackgroud = new BaseImage("data/images/backgroud.png");
@@ -125,7 +107,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 						SystemClock.sleep(STARTLINETIME);
 					}
 				}else if(NEXTLINE==arg0.what){
-					mFristDiceActors.remove(0);
+					mShowDiceActors.add(mFristDiceActors.remove(0));
 					boolean pand=false;
 					for(int i=0;i<mDiceActors[0].length;i++){
 						if(mDiceActors[i][0]){
@@ -164,6 +146,35 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 				return false;
 			}
 		});
+    	 mMainHandler=new Handler(GameUtils.getInstance().getContext().getMainLooper(), new Handler.Callback() {
+    			
+    			@Override
+    			public boolean handleMessage(Message arg0) {
+    				if(STARTGAME==arg0.what){              //添加
+    					 DiceActor diceActor=(DiceActor) arg0.obj;
+    					 mBackgroudStage.addActor(diceActor); 
+    					 mFristDiceActors.add(diceActor);
+    				}else if(RUNDICEACTOR==arg0.what){   //单个运行
+    					System.out.println(mFristDiceActors.size()+"  "+arg0.arg1);
+    					DiceActor diceActor=mFristDiceActors.get(arg0.arg1);
+    					diceActor.runAction(true);
+    				}else if(ShowNumber==arg0.what){
+    					mCalculationCount=getSetNumber();
+    					mGirlActor.showNumber(mCalculationCount);
+    				}else if(ALLRUNDICEACTOR==arg0.what){
+    					DiceActor actor=(DiceActor) arg0.obj;
+    					actor.setVisible(false);
+    					//actor.removeDice();
+    					mDeleteActors.add(actor);
+    					mShowDiceActors.remove(actor);
+    					for(int i=0;i<mShowDiceActors.size();i++){
+    						mShowDiceActors.get(i).runAction(false);
+    					}
+    				}
+    				
+    				return false;
+    			}
+    		});
     }
     private void initScreenLine(){
     	Thread thread=new Thread(new Runnable() {
@@ -181,11 +192,16 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 					SystemClock.sleep(STARTPAUSETIME);
 				}
 				mHandler.sendEmptyMessage(RUNDICEACTOR);
-			   SystemClock.sleep(STARTLINETIME*InitLineCount);
+				SystemClock.sleep(STARTLINETIME*InitLineCount);
 			 }
+			mMainHandler.sendEmptyMessage(ShowNumber);
+			isClick=true;
 			}
 		});
     	thread.start();
+    }
+    private int getSetNumber(){
+    	return 10;
     }
 	private int getLevelCountToRange(){
 		if(mLevelCount==0){
@@ -259,7 +275,9 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	}
 	
 	private void resetScreen(){
+		isClick=false;
 		mCalculationCount=0;
+		mDeleteActors.clear();
 		mFristDiceActors.clear();
 		mShowDiceActors.clear();
 		mSelectDiceActors.clear();

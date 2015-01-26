@@ -5,6 +5,7 @@ import static com.gaozhongkui.mathematics.screen.MainScreen.mBorderDigitals;
 import static com.gaozhongkui.mathematics.screen.MainScreen.mDiceActors;
 import static com.gaozhongkui.mathematics.screen.MainScreen.mDigitals;
 import android.graphics.PointF;
+import android.os.Message;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -24,8 +25,8 @@ public class DiceActor extends BaseActor {
 	private Texture   mCacheTexture;
 	private Texture   mCacheDigitalTexture;
 	private PointF    mStartPoint;
-	private int   mLineX;
-	private float mIntervalDistance;
+	private int     mLineX;
+	private float   mIntervalDistance;
 	private boolean isDown;
 	private int     mFigure;
 	private int     mPostion;
@@ -49,9 +50,17 @@ public class DiceActor extends BaseActor {
 	    	   @Override
 	    	public boolean touchDown(InputEvent event, float x, float y,
 	    			int pointer, int button) {
-	    		   isDown=true;
-	    		   mCacheTexture=mBorderDigital;
+	    		   if(MainScreen.isClick){
+	    			   isDown=true;
+		    		   mCacheTexture=mBorderDigital;
+		    		   clickDisappear(); 
+	    		   }
 	    		return true;
+	    	}
+	    	   @Override
+	    	public void touchUp(InputEvent event, float x, float y,
+	    			int pointer, int button) {
+	    		super.touchUp(event, x, y, pointer, button);
 	    	}
 	       });	   
 	}
@@ -76,13 +85,22 @@ public class DiceActor extends BaseActor {
   	    	  if(isfrist){
   	    		 mDuration=(count*mInitDuration)+mInitLineIntervalDuration;
   	    	  }else{
+  	    		 mDiceActors[mPostion][mLineX]=false;
   	    		 mDuration=((count-mLineX)*mInitDuration);
   	    	  }
-  	    	  mLineX=count;
+  	    	  mLineX=i;
   	    	  isRun=true;	
     		  break;
     	  }
     	}
+    }
+    
+    private void clickDisappear(){
+    	mDiceActors[mPostion][mLineX]=false;
+    	Message message=MainScreen.mMainHandler.obtainMessage();
+    	message.what=MainScreen.ALLRUNDICEACTOR;
+    	message.obj=this;
+    	message.sendToTarget();
     }
 	public void reset(){
 		isDown=false;

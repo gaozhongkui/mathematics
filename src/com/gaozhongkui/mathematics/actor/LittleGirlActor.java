@@ -4,11 +4,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.gaozhongkui.mathematics.utils.TextureUtils;
 import com.gaozhongkui.mathematics.widget.BaseActor;
+import com.gaozhongkui.mathematics.widget.BaseTexture;
 
 public class LittleGirlActor extends BaseActor {
+	private static final int SHOWNUMBERY=248;
     private Texture[]   mSitTextures;
+    private Texture[]   mNumbers;
+    private Texture[]   mShowNumber;
     private Texture  mCacheTexture;
+    private Texture  mDialog;
     private GirlState  mGirlState;
+    private boolean isShowNumber;
     private int mCreenPostion;
 	@Override
 	protected void initView() {
@@ -17,6 +23,15 @@ public class LittleGirlActor extends BaseActor {
 			mSitTextures[i]=new Texture("data/images/zuo/sit"+(i+1)+".png");
 			TextureUtils.setTextureSmoothFilter(mSitTextures[i]);
 		}
+		mNumbers=new Texture[10];
+		for(int i=0;i<mNumbers.length;i++){
+			mNumbers[i]=new BaseTexture("data/images/digitaldialog/digital"+i+".png");
+		}
+		mShowNumber=new Texture[3];
+		for(int i=0;i<3;i++){
+			mShowNumber[i]=mNumbers[0];
+		}
+		mDialog=new BaseTexture("data/images/digitaldialog/digitaldialog.png");
 		mGirlState=GirlState.Thinking;
 		mDuration=5f;
 		mCacheTexture=mSitTextures[mCreenPostion];
@@ -27,6 +42,12 @@ public class LittleGirlActor extends BaseActor {
 	protected void drawChild(Batch batch, float parentAlpha) {
         if(mCacheTexture!=null){
         	batch.draw(mCacheTexture, getX(), getY());
+        	if(isShowNumber){
+        		batch.draw(mDialog, 227, 215);
+        		batch.draw(mShowNumber[0], 232, SHOWNUMBERY);
+         		batch.draw(mShowNumber[1], 263, SHOWNUMBERY);
+         		batch.draw(mShowNumber[2], 294, SHOWNUMBERY);
+        	}
         }
 	}
 
@@ -42,7 +63,10 @@ public class LittleGirlActor extends BaseActor {
         	 mCacheTexture=mSitTextures[mCreenPostion];
          }
 	}
-
+    
+	public void showNumber(int number){
+		isShowNumber=true;
+	}
 	@Override
 	protected void clearRes() {
 
