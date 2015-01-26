@@ -35,7 +35,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	public static Boolean[][]  mDiceActors=null;
 	public static List<DiceActor>  mSelectDiceActors=new ArrayList<DiceActor>();
 	public static List<DiceActor>  mShowDiceActors=new ArrayList<DiceActor>();
-	private static List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
+	private static  volatile List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
 	private static List<DiceActor> mDeleteActors=new ArrayList<DiceActor>();
 	public static int   mCalculationCount=0; 
 	private static final int InitColumnCount=10;
@@ -108,6 +108,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 					}
 				}else if(NEXTLINE==arg0.what){
 					mShowDiceActors.add(mFristDiceActors.remove(0));
+					System.out.println("zhangsan");
 					boolean pand=false;
 					for(int i=0;i<mDiceActors[0].length;i++){
 						if(mDiceActors[i][0]){
@@ -129,10 +130,8 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 							}
 							if(j>=InitColumnCount){
 								for(j=0;j<InitColumnCount;j++){
-									Message message=mMainHandler.obtainMessage();
-									message.what=RUNDICEACTOR;
-									message.arg1=j;
-									message.sendToTarget();
+									DiceActor diceActor=mFristDiceActors.get(j);
+			    					diceActor.runAction(true);
 								}
 							}
 						}else{
@@ -155,7 +154,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					 mBackgroudStage.addActor(diceActor); 
     					 mFristDiceActors.add(diceActor);
     				}else if(RUNDICEACTOR==arg0.what){   //单个运行
-    					System.out.println(mFristDiceActors.size()+"  "+arg0.arg1);
     					DiceActor diceActor=mFristDiceActors.get(arg0.arg1);
     					diceActor.runAction(true);
     				}else if(ShowNumber==arg0.what){
