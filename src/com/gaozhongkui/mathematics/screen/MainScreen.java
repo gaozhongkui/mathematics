@@ -126,12 +126,14 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 								message.what=STARTGAME;
 								message.obj=diceActor;
 								message.sendToTarget();
-								SystemClock.sleep(STARTPAUSETIME);
+								SystemClock.sleep(STARTPAUSETIME*10);
 							}
 							if(j>=InitColumnCount){
 								for(j=0;j<InitColumnCount;j++){
-									DiceActor diceActor=mFristDiceActors.get(j);
-			    					diceActor.runAction(true);
+									Message message=mMainHandler.obtainMessage();
+									message.what=RUNDICEACTOR;
+									message.arg1=j;
+									message.sendToTarget();
 								}
 							}
 						}else{
@@ -154,6 +156,8 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					 mBackgroudStage.addActor(diceActor); 
     					 mFristDiceActors.add(diceActor);
     				}else if(RUNDICEACTOR==arg0.what){   //单个运行
+    					System.out.println("lisi");
+    					System.out.println(mFristDiceActors.size()+"  "+arg0.arg1);
     					DiceActor diceActor=mFristDiceActors.get(arg0.arg1);
     					diceActor.runAction(true);
     				}else if(ShowNumber==arg0.what){
