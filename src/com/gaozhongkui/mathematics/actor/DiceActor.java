@@ -142,7 +142,8 @@ public class DiceActor extends BaseActor {
 	}
 	
 	public void removeDice(){
-		remove();
+		setVisible(false);
+		//clear();
 	}
 	@Override
 	protected void clearRes() {

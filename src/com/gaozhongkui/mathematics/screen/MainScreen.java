@@ -35,6 +35,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	public static Boolean[][]  mDiceActors=null;
 	public static List<DiceActor>  mSelectDiceActors=new ArrayList<DiceActor>();
 	public static List<DiceActor>  mShowDiceActors=new ArrayList<DiceActor>();
+	private static List<DiceActor> mDeleteDiceActors=new ArrayList<DiceActor>();
 	private static  volatile List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
 	public static int   mCalculationCount=0; 
 	private static final int InitColumnCount=10;
@@ -163,6 +164,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					DiceActor actor=(DiceActor) arg0.obj;
     					actor.setVisible(false);
     					actor.removeDice();
+    					mDeleteDiceActors.add(actor);
     					mShowDiceActors.remove(actor);
     					for(int i=0;i<mShowDiceActors.size();i++){
     						mShowDiceActors.get(i).runAction(false);
@@ -275,9 +277,20 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		isClick=false;
 		mCalculationCount=0;
 		mFristDiceActors.clear();
-		mShowDiceActors.clear();
 		mSelectDiceActors.clear();
 		mStartWelcomeActor.startAction();
+		clearAllDice();
 		HidePromterActor();
+	}
+	
+	private void clearAllDice(){
+		for(DiceActor diceActor:mDeleteDiceActors){
+			diceActor.clear();
+		}
+		for(DiceActor diceActor:mShowDiceActors){
+			diceActor.clear();
+		}
+		mDeleteDiceActors.clear();
+		mShowDiceActors.clear();
 	}
 }

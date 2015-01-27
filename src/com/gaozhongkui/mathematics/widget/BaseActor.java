@@ -19,7 +19,6 @@ public abstract class BaseActor extends Actor {
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
 		drawChild(batch, parentAlpha);
-
 	}
 
 	protected abstract void drawChild(Batch batch, float parentAlpha);
@@ -45,8 +44,8 @@ public abstract class BaseActor extends Actor {
 	}
 	@Override
 	public void clear() {
-		super.clear();
 		remove();
+		super.clear();
 		clearRes();
 	}
 	protected abstract void clearRes();
