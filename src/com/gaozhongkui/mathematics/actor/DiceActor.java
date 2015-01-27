@@ -73,7 +73,6 @@ public class DiceActor extends BaseActor {
 		    		  MainScreen.mMainHandler.obtainMessage(MainScreen.AnswerRight).sendToTarget();
 		    	}else if(MainScreen.mCalculationCount<0){
 		    		isError=true;
-		    		 
 		    	}
 	        }
 	       });	
