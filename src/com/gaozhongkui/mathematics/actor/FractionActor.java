@@ -1,5 +1,7 @@
 package com.gaozhongkui.mathematics.actor;
 
+
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,6 +11,7 @@ import com.gaozhongkui.mathematics.utils.TextureUtils;
 import com.gaozhongkui.mathematics.widget.BaseActor;
 
 public class FractionActor extends BaseActor {
+	private final float TextDistance=116;
 	private Texture mTexture;
     private BitmapFont mLevelBitmapFont;  /** ¹Ø¿¨ **/
     private BitmapFont mFractionBitmapFont;  /** ·ÖÊý **/
@@ -22,18 +25,21 @@ public class FractionActor extends BaseActor {
 		TextureUtils.setTextureSmoothFilter(mTexture);
 		setSize(mTexture.getWidth(), mTexture.getHeight());
 		setPosition(45, 318);
-		FreeTypeBitmapFontData fontData=FontDataLoader.getInstance().getBitmapFontData(18);
+		FreeTypeBitmapFontData fontData=FontDataLoader.getInstance().getBitmapFontData(20);
 		mLevelBitmapFont=new BitmapFont(fontData, fontData.getTextureRegions(), false);
 		mFractionBitmapFont=new BitmapFont(fontData, fontData.getTextureRegions(), false);
 		mTaskBitmapFont=new BitmapFont(fontData, fontData.getTextureRegions(), false);
+		mTaskBitmapFont.setColor(Color.BLACK);
+		mLevelBitmapFont.setColor(Color.BLACK);
+		mFractionBitmapFont.setColor(Color.BLACK);
 	}
 
 	@Override
 	protected void drawChild(Batch batch, float parentAlpha) {
 		batch.draw(mTexture, getX(), getY());
-		mLevelBitmapFont.draw(batch, ""+mLevel, getX(), getY());
-		mFractionBitmapFont.draw(batch, ""+mFraction, getX(), getY());
-		mTaskBitmapFont.draw(batch, ""+mTask, getX(), getY());
+		mLevelBitmapFont.draw(batch, ""+mLevel, getX()+TextDistance, getY()+106);
+		mFractionBitmapFont.draw(batch, ""+mFraction, getX()+TextDistance, getY()+76);
+		mTaskBitmapFont.draw(batch, ""+mTask, getX()+TextDistance, getY()+46);
 	}
 
 	@Override
