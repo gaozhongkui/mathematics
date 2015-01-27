@@ -107,7 +107,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 					}
 				}else if(NEXTLINE==arg0.what){
 					mShowDiceActors.add(mFristDiceActors.remove(0));
-					System.out.println("zhangsan");
 					boolean pand=false;
 					for(int i=0;i<mDiceActors[0].length;i++){
 						if(mDiceActors[i][0]){
@@ -125,7 +124,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 								message.what=STARTGAME;
 								message.obj=diceActor;
 								message.sendToTarget();
-								SystemClock.sleep(STARTPAUSETIME*10);
+								SystemClock.sleep(STARTPAUSETIME);
 							}
 							if(j>=InitColumnCount){
 								for(j=0;j<InitColumnCount;j++){
