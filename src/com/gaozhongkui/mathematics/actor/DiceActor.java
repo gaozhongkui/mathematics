@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gaozhongkui.mathematics.screen.MainScreen;
 import com.gaozhongkui.mathematics.widget.BaseActor;
 
@@ -84,6 +83,9 @@ public class DiceActor extends BaseActor {
       
 	}
     public void runAction(boolean isfrist){
+    	if(isRun){
+    	 return;	
+    	}
     	isFristRun=isfrist;
     	int count=0;
     	for(int i=9;i>=mLineX;i--){
@@ -130,7 +132,10 @@ public class DiceActor extends BaseActor {
 				setY(mStartPoint.y-mIntervalDistance);
 				mStartPoint.y=getY();
 				if(isFristRun){
-					MainScreen.mHandler.sendEmptyMessage(MainScreen.NEXTLINE);
+					Message message=MainScreen.mHandler.obtainMessage();
+					message.what=MainScreen.NEXTLINE;
+					message.obj=this;
+					message.sendToTarget();
 				}
 			}else{
 				float p=mPercent/mDuration;
