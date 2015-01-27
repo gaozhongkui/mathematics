@@ -25,10 +25,13 @@ public class FractionActor extends BaseActor {
 		TextureUtils.setTextureSmoothFilter(mTexture);
 		setSize(mTexture.getWidth(), mTexture.getHeight());
 		setPosition(45, 318);
-		FreeTypeBitmapFontData fontData=FontDataLoader.getInstance().getBitmapFontData(20);
+		FreeTypeBitmapFontData fontData=FontDataLoader.getInstance().getBitmapFontData(23);
 		mLevelBitmapFont=new BitmapFont(fontData, fontData.getTextureRegions(), false);
 		mFractionBitmapFont=new BitmapFont(fontData, fontData.getTextureRegions(), false);
 		mTaskBitmapFont=new BitmapFont(fontData, fontData.getTextureRegions(), false);
+		TextureUtils.setTextureRegionSmoothFilter(mLevelBitmapFont.getRegion());
+		TextureUtils.setTextureRegionSmoothFilter(mFractionBitmapFont.getRegion());
+		TextureUtils.setTextureRegionSmoothFilter(mTaskBitmapFont.getRegion());
 		mTaskBitmapFont.setColor(Color.BLACK);
 		mLevelBitmapFont.setColor(Color.BLACK);
 		mFractionBitmapFont.setColor(Color.BLACK);
@@ -37,9 +40,9 @@ public class FractionActor extends BaseActor {
 	@Override
 	protected void drawChild(Batch batch, float parentAlpha) {
 		batch.draw(mTexture, getX(), getY());
-		mLevelBitmapFont.draw(batch, ""+mLevel, getX()+TextDistance, getY()+106);
-		mFractionBitmapFont.draw(batch, ""+mFraction, getX()+TextDistance, getY()+76);
-		mTaskBitmapFont.draw(batch, ""+mTask, getX()+TextDistance, getY()+46);
+		mLevelBitmapFont.draw(batch, ""+mLevel, getX()+TextDistance, getY()+108);
+		mFractionBitmapFont.draw(batch, ""+mFraction, getX()+TextDistance, getY()+78);
+		mTaskBitmapFont.draw(batch, ""+mTask, getX()+TextDistance, getY()+48);
 	}
 
 	@Override
