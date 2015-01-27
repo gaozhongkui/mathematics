@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gaozhongkui.mathematics.screen.MainScreen;
 import com.gaozhongkui.mathematics.widget.BaseActor;
 
@@ -56,18 +57,20 @@ public class DiceActor extends BaseActor {
 	    	public boolean touchDown(InputEvent event, float x, float y,
 	    			int pointer, int button) {
 	    		   if(MainScreen.isClick){
-	    			   clickDisappear(); 
 	    			   isDown=true;
 		    		   mCacheTexture=mBorderDigital;
 	    		   }
 	    		return true;
 	    	}
-	    	   @Override
-	    	public void touchUp(InputEvent event, float x, float y,
-	    			int pointer, int button) {
-	    		super.touchUp(event, x, y, pointer, button);
-	    	}
-	       });	   
+	       });	
+		addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				super.clicked(event, x, y);
+				  clickDisappear(); 
+			}
+		});
+		
 	}
 	@Override
 	protected void drawChild(Batch batch, float parentAlpha) {
@@ -105,6 +108,7 @@ public class DiceActor extends BaseActor {
     
     private void clickDisappear(){
     	mDiceActors[mPostion][mLineX]=false;
+    	removeDice();
     	Message message=MainScreen.mMainHandler.obtainMessage();
     	message.what=MainScreen.ALLRUNDICEACTOR;
     	message.obj=this;
@@ -142,8 +146,7 @@ public class DiceActor extends BaseActor {
 	}
 	
 	public void removeDice(){
-		setVisible(false);
-		//clear();
+		clear();
 	}
 	@Override
 	protected void clearRes() {
