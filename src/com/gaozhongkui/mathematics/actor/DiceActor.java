@@ -32,8 +32,6 @@ public class DiceActor extends BaseActor {
 	private int     mPostion;
 	private boolean isRun;
 	private boolean isError;
-	protected float mErrorDuration = 0;
-	protected float mErrorPercent = 0;
 	private boolean isFristRun;
 	public DiceActor(int figure,int postion) {
 		super();
@@ -48,7 +46,6 @@ public class DiceActor extends BaseActor {
 	protected void initView() {
       initListener();
       setSize(mBorderWidth, mBorderHeight);
-      mErrorDuration=0.8f;
 	}
 	private void initListener(){
 		addListener(new InputListener(){
@@ -59,7 +56,8 @@ public class DiceActor extends BaseActor {
 	    			   if(!isDown){
 	    				   isDown=true;
 	    				   mCacheTexture=mBorderDigital;
-			    		   MainScreen.mCalculationCount-=  mFigure;
+	    				   
+			    		   MainScreen.mSelectCalculationCount+=  mFigure;
 			    		   MainScreen.mMainHandler.obtainMessage(MainScreen.SelectDice, DiceActor.this).sendToTarget();
 	    			   }
 	    		   }
@@ -69,10 +67,12 @@ public class DiceActor extends BaseActor {
 	    public void touchUp(InputEvent event, float x, float y,
 	    		int pointer, int button) {
 	    	super.touchUp(event, x, y, pointer, button);
-		    	if(MainScreen.mCalculationCount==0){
+		    	if(MainScreen.mCalculationCount==MainScreen.mSelectCalculationCount){
 		    		  MainScreen.mMainHandler.obtainMessage(MainScreen.AnswerRight).sendToTarget();
-		    	}else if(MainScreen.mCalculationCount<0){
-		    		isError=true;
+		    	}else if(MainScreen.mCalculationCount<MainScreen.mSelectCalculationCount){
+					Message message= MainScreen.mMainHandler.obtainMessage(MainScreen.AnswerWrong);
+					MainScreen.mMainHandler.sendMessageAtTime(message, 10);
+		    	//	isError=true;
 		    	}
 	        }
 	       });	
@@ -85,9 +85,9 @@ public class DiceActor extends BaseActor {
 			if(isDown){
 	          batch.draw(mCacheDigitalTexture, getX()+(getWidth()/2-mCacheDigitalTexture.getWidth()/2), getY()+(getHeight()/2-mCacheDigitalTexture.getHeight()/2));
 	        }
-			if(isError){
-				batch.draw(MainScreen.mError, getX()+(getWidth()/2-MainScreen.mError.getWidth()/2), getY()+(getHeight()/2-MainScreen.mError.getHeight()/2));	
-			}
+		}
+		if(isError){
+			batch.draw(MainScreen.mError, getX()+(getWidth()/2-MainScreen.mError.getWidth()/2), getY()+(getHeight()/2-MainScreen.mError.getHeight()/2));	
 		}
       
 	}
@@ -152,15 +152,6 @@ public class DiceActor extends BaseActor {
 				setY(mStartPoint.y-mIntervalDistance*p);
 			}
 			
-			
-			if(isError){
-				mErrorPercent+=arg0;
-				if(mErrorPercent>mErrorDuration){
-					 mErrorPercent=0;
-					 isError=false;
-					 MainScreen.mMainHandler.obtainMessage(MainScreen.AnswerWrong).sendToTarget();
-				}
-			}
 		}
 	}
 	

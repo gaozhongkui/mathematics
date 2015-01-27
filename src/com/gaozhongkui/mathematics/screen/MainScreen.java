@@ -37,6 +37,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	public static List<DiceActor>  mShowDiceActors=new ArrayList<DiceActor>();
 	private static  volatile List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
 	public static int   mCalculationCount=0;   /** 计算总额 **/
+	public static int   mSelectCalculationCount=0;
 	private static final int InitColumnCount=10;
 	private static final int InitLineCount=4;
 	private static final int STARTGAME=1026;
@@ -175,14 +176,17 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     				}else if(AnswerRight==arg0.what){   /** 对**/
     					for(DiceActor actor:mSelectDiceActors){
     						actor.clickDisappear();
+    						mShowDiceActors.remove(actor);
     					}
     					mMainHandler.sendEmptyMessage(ShowNumber);
     					mSelectDiceActors.clear();
+    					mSelectCalculationCount=0;
     				}else if(AnswerWrong==arg0.what){  /**  错 **/
     					for(DiceActor actor:mSelectDiceActors){
     						actor.reset();
     					}
     					mSelectDiceActors.clear();
+    					mSelectCalculationCount=0;
     				}else if(SelectDice==arg0.what){  /** 选择 **/
     					DiceActor actor=(DiceActor) arg0.obj;
     					mSelectDiceActors.add(actor);
@@ -220,7 +224,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
         if(mLevelCount==0){
 			
 		}
-    	return 6;
+    	return MathUtils.random(10);
     }
 	private int getLevelCountToRange(){
 		if(mLevelCount==0){
@@ -304,9 +308,9 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	}
 	
 	private void clearAllDice(){
-		/*	for(DiceActor diceActor:mShowDiceActors){
+		for(DiceActor diceActor:mShowDiceActors){
 			diceActor.clear();
-		}*/
+		}
 		mShowDiceActors.clear();
 	}
 }
