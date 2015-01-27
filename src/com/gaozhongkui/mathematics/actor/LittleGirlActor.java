@@ -32,15 +32,15 @@ public class LittleGirlActor extends BaseActor {
 		}
 		mStrivingTextures=new Texture[8];
 		for(int i=0;i<mStrivingTextures.length;i++){
-			mStrivingTextures[i]=new BaseTexture("data/images/striving/striving"+i+".png");
+			mStrivingTextures[i]=new BaseTexture("data/images/striving/striving"+(i+1)+".png");
 		}
 		mFailedTextures=new BaseTexture[5];
 		for(int i=0;i<mFailedTextures.length;i++){
-			mFailedTextures[i]=new BaseTexture("data/images/failed/failed"+i+".png");
+			mFailedTextures[i]=new BaseTexture("data/images/failed/failed"+(i+1)+".png");
 		}
 		mWinTextures=new BaseTexture[3];
 		for(int i=0;i<mWinTextures.length;i++){
-			mWinTextures[i]=new BaseTexture("data/images/win/win"+i+".png");
+			mWinTextures[i]=new BaseTexture("data/images/win/win"+(i+1)+".png");
 		}
 		mShowNumber=new Texture[3];
 		for(int i=0;i<3;i++){
