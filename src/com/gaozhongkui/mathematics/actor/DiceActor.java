@@ -59,7 +59,7 @@ public class DiceActor extends BaseActor {
 	    			   if(!isDown){
 	    				   isDown=true;
 	    				   mCacheTexture=mBorderDigital;
-			    		   MainScreen.mCalculationCount=-mFigure;
+			    		   MainScreen.mCalculationCount-=  mFigure;
 			    		   MainScreen.mMainHandler.obtainMessage(MainScreen.SelectDice, DiceActor.this).sendToTarget();
 	    			   }
 	    		   }
