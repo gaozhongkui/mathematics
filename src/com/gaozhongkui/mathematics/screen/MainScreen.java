@@ -36,18 +36,20 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	public static List<DiceActor>  mSelectDiceActors=new ArrayList<DiceActor>();
 	public static List<DiceActor>  mShowDiceActors=new ArrayList<DiceActor>();
 	private static  volatile List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
-	public static int   mCalculationCount=0; 
+	public static int   mCalculationCount=0;   /** 计算总额 **/
 	private static final int InitColumnCount=10;
 	private static final int InitLineCount=4;
 	private static final int STARTGAME=1026;
 	private static final int GameOver=1022;
 	private static final int ShowNumber=1022;
+	private static int mLevelCount=1; /**关卡 **/
+	private static int mFractionCount=1; /**积分 **/
+	private static int mLevelTask=1; /**任务 **/
 	public  static final int ALLRUNDICEACTOR=1028;
 	public  static final int NEXTLINE=1032;
 	private static final int RUNDICEACTOR=1030;
 	private static int STARTPAUSETIME=200;
 	private static int STARTLINETIME=100;
-	private static int mLevelCount=0;
 	private Image mDrawingBoard;
     private FractionActor mFractionActor;
     private StartWelcomeActor  mStartWelcomeActor;
@@ -107,8 +109,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 					}
 				}else if(NEXTLINE==arg0.what){
 					DiceActor actor=(DiceActor) arg0.obj;
-				   boolean b=mFristDiceActors.remove(actor);
-					System.out.println("lkaaakkkk "+ b);
+				    mFristDiceActors.remove(actor);
 					mShowDiceActors.add(actor);
 					boolean pand=false;
 					for(int i=0;i<mDiceActors[0].length;i++){
@@ -164,8 +165,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					mGirlActor.showNumber(mCalculationCount);
     				}else if(ALLRUNDICEACTOR==arg0.what){
     					DiceActor actor=(DiceActor) arg0.obj;
-    					boolean b=mShowDiceActors.remove(actor);
-    					System.out.println("lkkkkk "+ b);
+    					mShowDiceActors.remove(actor);
     					for(int i=0;i<mShowDiceActors.size();i++){
     						mShowDiceActors.get(i).runAction(false);
     					}
@@ -200,7 +200,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     	thread.start();
     }
     private int getSetNumber(){
-    	return 10;
+    	return 986;
     }
 	private int getLevelCountToRange(){
 		if(mLevelCount==0){

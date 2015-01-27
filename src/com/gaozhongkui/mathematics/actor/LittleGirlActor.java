@@ -65,7 +65,30 @@ public class LittleGirlActor extends BaseActor {
 	}
     
 	public void showNumber(int number){
+		if(number>99){
+			int a=(number/100);
+			int b=(int)(number/10)-(a*10);
+			int c=number-(a*100)-(b*10);
+			mShowNumber[0]=getNumberByTexture(a);
+			mShowNumber[1]=getNumberByTexture(b);
+			mShowNumber[2]=getNumberByTexture(c);
+		}else if(number>9){
+			mShowNumber[0]=mNumbers[0];
+			int a=(number/10);
+			int b=(a*10)-number;
+			mShowNumber[1]=getNumberByTexture(a);
+			mShowNumber[2]=getNumberByTexture(b);
+		}else{
+			mShowNumber[0]=mNumbers[0];
+			mShowNumber[1]=mNumbers[0];
+			mShowNumber[2]=getNumberByTexture(number);
+		}
+		
 		isShowNumber=true;
+	}
+	
+	private Texture  getNumberByTexture(int i){
+		return mNumbers[i];
 	}
 	@Override
 	protected void clearRes() {
