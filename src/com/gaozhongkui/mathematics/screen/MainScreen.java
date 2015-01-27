@@ -19,6 +19,7 @@ import com.gaozhongkui.mathematics.actor.FractionActor;
 import com.gaozhongkui.mathematics.actor.LittleGirlActor;
 import com.gaozhongkui.mathematics.actor.StartPrompterActor;
 import com.gaozhongkui.mathematics.actor.StartWelcomeActor;
+import com.gaozhongkui.mathematics.actor.LittleGirlActor.GirlState;
 import com.gaozhongkui.mathematics.actor.StartWelcomeActor.StartWelcomeListener;
 import com.gaozhongkui.mathematics.utils.GameUtils;
 import com.gaozhongkui.mathematics.widget.BaseButton;
@@ -116,10 +117,19 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 				    mFristDiceActors.remove(actor);
 					mShowDiceActors.add(actor);
 					boolean pand=false;
+					boolean isStriving=false;
 					for(int i=0;i<mDiceActors[0].length;i++){
 						if(mDiceActors[i][0]){
 							pand=true;
 							break;
+						}
+						if(mDiceActors[i][3]){
+							isStriving=true;
+						}
+					}
+					if(isStriving){
+						if(mGirlActor.getmGirlState()!=GirlState.Striving){
+							mGirlActor.setmGirlState(GirlState.Striving);
 						}
 					}
 					if(mFristDiceActors.isEmpty()){
@@ -148,6 +158,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 						
 					}
 				}else if(GameOver==arg0.what){
+					mGirlActor.setmGirlState(GirlState.Failed);
 					System.out.println("ÓÎÏ·½áÊø");
 				}
 				return false;

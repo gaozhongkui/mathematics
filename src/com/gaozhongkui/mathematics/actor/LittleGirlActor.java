@@ -9,6 +9,9 @@ import com.gaozhongkui.mathematics.widget.BaseTexture;
 public class LittleGirlActor extends BaseActor {
 	private static final int SHOWNUMBERY=248;
     private Texture[]   mSitTextures;
+    private Texture[]   mStrivingTextures;
+    private Texture[]   mFailedTextures;
+    private Texture[]   mWinTextures;
     private Texture[]   mNumbers;
     private Texture[]   mShowNumber;
     private Texture  mCacheTexture;
@@ -26,6 +29,18 @@ public class LittleGirlActor extends BaseActor {
 		mNumbers=new Texture[10];
 		for(int i=0;i<mNumbers.length;i++){
 			mNumbers[i]=new BaseTexture("data/images/digitaldialog/digital"+i+".png");
+		}
+		mStrivingTextures=new Texture[8];
+		for(int i=0;i<mStrivingTextures.length;i++){
+			mStrivingTextures[i]=new BaseTexture("data/images/striving/striving"+i+".png");
+		}
+		mFailedTextures=new BaseTexture[5];
+		for(int i=0;i<mFailedTextures.length;i++){
+			mFailedTextures[i]=new BaseTexture("data/images/failed/failed"+i+".png");
+		}
+		mWinTextures=new BaseTexture[3];
+		for(int i=0;i<mWinTextures.length;i++){
+			mWinTextures[i]=new BaseTexture("data/images/win/win"+i+".png");
 		}
 		mShowNumber=new Texture[3];
 		for(int i=0;i<3;i++){
@@ -57,10 +72,28 @@ public class LittleGirlActor extends BaseActor {
          if(mPercent>mDuration){
         	 mPercent=0;
         	 mCreenPostion++;
-        	 if(mCreenPostion>=mSitTextures.length){
-        		 mCreenPostion=0;
+        	 if(mGirlState==GirlState.Thinking){
+        		 if(mCreenPostion>=mSitTextures.length){
+            		 mCreenPostion=0;
+            	 }
+            	 mCacheTexture=mSitTextures[mCreenPostion];
+        	 }else if(mGirlState==GirlState.Striving){
+        		 if(mCreenPostion>=mStrivingTextures.length){
+            		 mCreenPostion=0;
+            	 }
+            	 mCacheTexture=mStrivingTextures[mCreenPostion]; 
+        	 }else if(mGirlState==GirlState.Failed){
+        		 if(mCreenPostion>=mFailedTextures.length){
+            		 mCreenPostion=0;
+            	 }
+            	 mCacheTexture=mFailedTextures[mCreenPostion]; 
+        	 }else if(mGirlState==GirlState.Win){
+        		 if(mCreenPostion>=mWinTextures.length){
+            		 mCreenPostion=0;
+            	 }
+            	 mCacheTexture=mWinTextures[mCreenPostion]; 
         	 }
-        	 mCacheTexture=mSitTextures[mCreenPostion];
+        	 
          }
 	}
     
@@ -87,6 +120,14 @@ public class LittleGirlActor extends BaseActor {
 		isShowNumber=true;
 	}
 	
+	public GirlState getmGirlState() {
+		return mGirlState;
+	}
+
+	public void setmGirlState(GirlState mGirlState) {
+		this.mGirlState = mGirlState;
+	}
+
 	private Texture  getNumberByTexture(int i){
 		return mNumbers[i];
 	}
@@ -94,8 +135,8 @@ public class LittleGirlActor extends BaseActor {
 	protected void clearRes() {
 
 	}
-	enum GirlState{
-		Thinking,Striving,Win,Failed
+    public enum GirlState{
+  		Thinking,Striving,Win,Failed
 	}
 
 }
