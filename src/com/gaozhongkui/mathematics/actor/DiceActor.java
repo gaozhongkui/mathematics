@@ -34,6 +34,7 @@ public class DiceActor extends BaseActor {
 	private boolean isError;
 	protected float mErrorDuration = 0;
 	protected float mErrorPercent = 0;
+	private boolean isFristRun;
 	public DiceActor(int figure,int postion) {
 		super();
 		mFigure=figure;
@@ -81,6 +82,7 @@ public class DiceActor extends BaseActor {
       
 	}
     public void runAction(boolean isfrist){
+    	isFristRun=isfrist;
     	int count=0;
     	for(int i=9;i>=mLineX;i--){
     	 boolean pand=mDiceActors[mPostion][i];
@@ -124,7 +126,9 @@ public class DiceActor extends BaseActor {
 				mPercent=0;
 				setY(mStartPoint.y-mIntervalDistance);
 				mStartPoint.y=getY();
-				MainScreen.mHandler.sendEmptyMessage(MainScreen.NEXTLINE);
+				if(isFristRun){
+					MainScreen.mHandler.sendEmptyMessage(MainScreen.NEXTLINE);
+				}
 			}else{
 				float p=mPercent/mDuration;
 				setY(mStartPoint.y-mIntervalDistance*p);

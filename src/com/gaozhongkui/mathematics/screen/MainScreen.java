@@ -42,9 +42,9 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private static final int STARTGAME=1026;
 	private static final int GameOver=1022;
 	private static final int ShowNumber=1022;
-	public static final int ALLRUNDICEACTOR=1028;
-	private static final int RUNDICEACTOR=1030;
+	public  static final int ALLRUNDICEACTOR=1028;
 	public  static final int NEXTLINE=1032;
+	private static final int RUNDICEACTOR=1030;
 	private static int STARTPAUSETIME=200;
 	private static int STARTLINETIME=100;
 	private static int mLevelCount=0;
@@ -155,8 +155,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					 mBackgroudStage.addActor(diceActor); 
     					 mFristDiceActors.add(diceActor);
     				}else if(RUNDICEACTOR==arg0.what){   //单个运行
-    					System.out.println("lisi");
-    					System.out.println(mFristDiceActors.size()+"  "+arg0.arg1);
     					DiceActor diceActor=mFristDiceActors.get(arg0.arg1);
     					diceActor.runAction(true);
     				}else if(ShowNumber==arg0.what){
