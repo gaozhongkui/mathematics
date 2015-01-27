@@ -107,7 +107,8 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 					}
 				}else if(NEXTLINE==arg0.what){
 					DiceActor actor=(DiceActor) arg0.obj;
-					mFristDiceActors.remove(actor);
+				   boolean b=mFristDiceActors.remove(actor);
+					System.out.println("lkaaakkkk "+ b);
 					mShowDiceActors.add(actor);
 					boolean pand=false;
 					for(int i=0;i<mDiceActors[0].length;i++){
@@ -163,7 +164,8 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					mGirlActor.showNumber(mCalculationCount);
     				}else if(ALLRUNDICEACTOR==arg0.what){
     					DiceActor actor=(DiceActor) arg0.obj;
-    					mShowDiceActors.remove(actor);
+    					boolean b=mShowDiceActors.remove(actor);
+    					System.out.println("lkkkkk "+ b);
     					for(int i=0;i<mShowDiceActors.size();i++){
     						mShowDiceActors.get(i).runAction(false);
     					}
