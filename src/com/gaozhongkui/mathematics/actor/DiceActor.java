@@ -56,8 +56,12 @@ public class DiceActor extends BaseActor {
 	    	public boolean touchDown(InputEvent event, float x, float y,
 	    			int pointer, int button) {
 	    		   if(MainScreen.isClick){
-	    			   isDown=true;
-		    		   mCacheTexture=mBorderDigital;
+	    			   if(!isDown){
+	    				   isDown=true;
+	    				   mCacheTexture=mBorderDigital;
+			    		   MainScreen.mCalculationCount=-mFigure;
+			    		   MainScreen.mMainHandler.obtainMessage(MainScreen.SelectDice, DiceActor.this).sendToTarget();
+	    			   }
 	    		   }
 	    		return true;
 	    	}
@@ -65,8 +69,13 @@ public class DiceActor extends BaseActor {
 	    public void touchUp(InputEvent event, float x, float y,
 	    		int pointer, int button) {
 	    	super.touchUp(event, x, y, pointer, button);
-	    	clickDisappear(); 
-	    }
+		    	if(MainScreen.mCalculationCount==0){
+		    		  MainScreen.mMainHandler.obtainMessage(MainScreen.AnswerRight).sendToTarget();
+		    	}else if(MainScreen.mCalculationCount<0){
+		    		isError=true;
+		    		 
+		    	}
+	        }
 	       });	
 		
 	}
@@ -74,11 +83,12 @@ public class DiceActor extends BaseActor {
 	protected void drawChild(Batch batch, float parentAlpha) {
 		if(mCacheTexture!=null){
 			batch.draw(mCacheTexture, getX(), getY());
-			if(isDown&&!isError){
+			if(isDown){
 	          batch.draw(mCacheDigitalTexture, getX()+(getWidth()/2-mCacheDigitalTexture.getWidth()/2), getY()+(getHeight()/2-mCacheDigitalTexture.getHeight()/2));
-	        }else{
-	        	
 	        }
+			if(isError){
+				batch.draw(MainScreen.mError, getX()+(getWidth()/2-MainScreen.mError.getWidth()/2), getY()+(getHeight()/2-MainScreen.mError.getHeight()/2));	
+			}
 		}
       
 	}
@@ -107,7 +117,7 @@ public class DiceActor extends BaseActor {
     	}
     }
     
-    private void clickDisappear(){
+    public void clickDisappear(){
     	mDiceActors[mPostion][mLineX]=false;
     	removeDice();
     	Message message=MainScreen.mMainHandler.obtainMessage();
@@ -116,6 +126,7 @@ public class DiceActor extends BaseActor {
     	message.sendToTarget();
     }
 	public void reset(){
+		isError=false;
 		isDown=false;
 		mCacheTexture=mBorderDigitals[mFigure-1];
 	}
@@ -145,6 +156,11 @@ public class DiceActor extends BaseActor {
 			
 			if(isError){
 				mErrorPercent+=arg0;
+				if(mErrorPercent>mErrorDuration){
+					 mErrorPercent=0;
+					 isError=false;
+					 MainScreen.mMainHandler.obtainMessage(MainScreen.AnswerWrong).sendToTarget();
+				}
 			}
 		}
 	}

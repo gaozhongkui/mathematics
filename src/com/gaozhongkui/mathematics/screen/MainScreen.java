@@ -33,7 +33,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	public static Texture mError;
 	public static boolean isClick;
 	public static Boolean[][]  mDiceActors=null;
-	public static List<DiceActor>  mSelectDiceActors=new ArrayList<DiceActor>();
+	private static List<DiceActor>  mSelectDiceActors=new ArrayList<DiceActor>();
 	public static List<DiceActor>  mShowDiceActors=new ArrayList<DiceActor>();
 	private static  volatile List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
 	public static int   mCalculationCount=0;   /** 计算总额 **/
@@ -42,6 +42,9 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private static final int STARTGAME=1026;
 	private static final int GameOver=1022;
 	private static final int ShowNumber=1022;
+	public static final int  AnswerRight=1012;
+	public static final int  AnswerWrong=1016;
+	public static final int  SelectDice=1018;
 	private static int mLevelCount=1; /**关卡 **/
 	private static int mFractionCount=1; /**积分 **/
 	private static int mLevelTask=1; /**任务 **/
@@ -169,6 +172,20 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					for(int i=0;i<mShowDiceActors.size();i++){
     						mShowDiceActors.get(i).runAction(false);
     					}
+    				}else if(AnswerRight==arg0.what){   /** 对**/
+    					for(DiceActor actor:mSelectDiceActors){
+    						actor.clickDisappear();
+    					}
+    					mMainHandler.sendEmptyMessage(ShowNumber);
+    					mSelectDiceActors.clear();
+    				}else if(AnswerWrong==arg0.what){  /**  错 **/
+    					for(DiceActor actor:mSelectDiceActors){
+    						actor.reset();
+    					}
+    					mSelectDiceActors.clear();
+    				}else if(SelectDice==arg0.what){  /** 选择 **/
+    					DiceActor actor=(DiceActor) arg0.obj;
+    					mSelectDiceActors.add(actor);
     				}
     				
     				return false;
@@ -200,7 +217,10 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     	thread.start();
     }
     private int getSetNumber(){
-    	return 986;
+        if(mLevelCount==0){
+			
+		}
+    	return 6;
     }
 	private int getLevelCountToRange(){
 		if(mLevelCount==0){
