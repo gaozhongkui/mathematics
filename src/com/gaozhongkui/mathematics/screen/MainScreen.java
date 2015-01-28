@@ -67,6 +67,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		mForegroundStage.addActor(mStartBut);
 		initLittening();
 		initHandler();
+		nextLevel();
 		resetScreen();
 	}
     @SuppressLint("UseValueOf")

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeBitmapFontData;
+import com.gaozhongkui.mathematics.GameResource;
 import com.gaozhongkui.mathematics.utils.FontDataLoader;
 import com.gaozhongkui.mathematics.utils.TextureUtils;
 import com.gaozhongkui.mathematics.widget.BaseActor;
@@ -14,7 +15,6 @@ public class StartPrompterActor extends BaseActor {
 	private Texture  mTexture;
 	private Texture  mHintTexture;
 	private BitmapFont  mBitmapFont;
-	private int mQuantity=0;
 	@Override
 	protected void initView() {
 		mTexture=new BaseTexture("data/images/prompter/startprompter.png");
@@ -30,7 +30,7 @@ public class StartPrompterActor extends BaseActor {
 	protected void drawChild(Batch batch, float parentAlpha) {
 		batch.draw(mTexture, getX(), getY());
 		batch.draw(mHintTexture, getX()+17, getY()+240);
-		mBitmapFont.draw(batch, mQuantity+"", getX()+45, getY()+292);
+		mBitmapFont.draw(batch, GameResource.mLevelTask+"", getX()+45, getY()+292);
 	}
 
 	@Override
@@ -42,8 +42,5 @@ public class StartPrompterActor extends BaseActor {
 
 	}
 
-	public void setmQuantity(int mQuantity) {
-		this.mQuantity = mQuantity;
-	}
 
 }
