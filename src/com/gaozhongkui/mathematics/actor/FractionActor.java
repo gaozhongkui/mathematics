@@ -32,9 +32,10 @@ public class FractionActor extends BaseActor {
 		TextureUtils.setTextureRegionSmoothFilter(mLevelBitmapFont.getRegion());
 		TextureUtils.setTextureRegionSmoothFilter(mFractionBitmapFont.getRegion());
 		TextureUtils.setTextureRegionSmoothFilter(mTaskBitmapFont.getRegion());
-		mTaskBitmapFont.setColor(Color.BLACK);
-		mLevelBitmapFont.setColor(Color.BLACK);
-		mFractionBitmapFont.setColor(Color.BLACK);
+		Color color=Color.valueOf("025991");
+		mTaskBitmapFont.setColor(color);
+		mLevelBitmapFont.setColor(color);
+		mFractionBitmapFont.setColor(color);
 	}
 
 	@Override
