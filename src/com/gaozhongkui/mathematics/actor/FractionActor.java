@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeBitmapFontData;
+import com.gaozhongkui.mathematics.GameResource;
 import com.gaozhongkui.mathematics.utils.FontDataLoader;
 import com.gaozhongkui.mathematics.utils.TextureUtils;
 import com.gaozhongkui.mathematics.widget.BaseActor;
@@ -16,9 +17,6 @@ public class FractionActor extends BaseActor {
     private BitmapFont mLevelBitmapFont;  /** 关卡 **/
     private BitmapFont mFractionBitmapFont;  /** 分数 **/
     private BitmapFont mTaskBitmapFont;     /** 任务 **/
-    private int mLevel=0;
-    private int mFraction=0;
-    private int mTask=0;
 	@Override
 	protected void initView() {
 		mTexture = new Texture("data/images/fraction.png");
@@ -41,9 +39,9 @@ public class FractionActor extends BaseActor {
 	@Override
 	protected void drawChild(Batch batch, float parentAlpha) {
 		batch.draw(mTexture, getX(), getY());
-		mLevelBitmapFont.draw(batch, ""+mLevel, getX()+TextDistance, getY()+108);
-		mFractionBitmapFont.draw(batch, ""+mFraction, getX()+TextDistance, getY()+78);
-		mTaskBitmapFont.draw(batch, ""+mTask, getX()+TextDistance, getY()+48);
+		mLevelBitmapFont.draw(batch, ""+GameResource.mLevelCount, getX()+TextDistance, getY()+108);
+		mFractionBitmapFont.draw(batch, ""+GameResource.mFractionCount, getX()+TextDistance, getY()+78);
+		mTaskBitmapFont.draw(batch, ""+GameResource.mLevelTask, getX()+TextDistance, getY()+48);
 	}
 
 	@Override
@@ -56,28 +54,5 @@ public class FractionActor extends BaseActor {
 
 	}
 
-	public int getmLevel() {
-		return mLevel;
-	}
-
-	public void setmLevel(int mLevel) {
-		this.mLevel = mLevel;
-	}
-
-	public int getmFraction() {
-		return mFraction;
-	}
-
-	public void setmFraction(int mFraction) {
-		this.mFraction = mFraction;
-	}
-
-	public int getmTask() {
-		return mTask;
-	}
-
-	public void setmTask(int mTask) {
-		this.mTask = mTask;
-	}
-
+	
 }

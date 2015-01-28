@@ -35,6 +35,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private static final int STARTGAME=1026;
 	private static final int GameOver=1022;
 	private static final int ShowNumber=1022;
+	private static final int YouWin=1068;
 	private static final int RUNDICEACTOR=1030;
 	private static int STARTPAUSETIME=200;
 	private static int STARTLINETIME=100;
@@ -132,13 +133,10 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 								}
 							}
 						}else{
-							GameResource.mHandler.sendEmptyMessage(GameOver);
+							GameResource.mMainHandler.sendEmptyMessage(GameOver);
 						}
 						
 					}
-				}else if(GameOver==arg0.what){
-					mGirlActor.setmGirlState(GirlState.Failed);
-					System.out.println("游戏结束");
 				}
 				return false;
 			}
@@ -166,6 +164,12 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     				}else if(GameResource.SelectDice==arg0.what){  /** 选择 **/
     					DiceActor actor=(DiceActor) arg0.obj;
     					mSelectDiceActors.add(actor);
+    				}else if(GameOver==arg0.what){
+    					mGirlActor.setmGirlState(GirlState.Failed);
+    					System.out.println("游戏结束");
+    				}else if(YouWin==arg0.what){
+    					mGirlActor.setmGirlState(GirlState.Win);
+    					System.out.println("你影了");
     				}
     				
     				return false;
@@ -178,9 +182,16 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     	for(DiceActor actor:mSelectDiceActors){
 			actor.clickDisappear();
 		}
-		GameResource.mMainHandler.sendEmptyMessage(ShowNumber);
+    	GameResource.mSelectAnswerTask++;
+    	GameResource.mFractionCount+=mSelectDiceActors.size()*10;
 		mSelectDiceActors.clear();
 		GameResource.mSelectCalculationCount=0;
+		
+		if(getCurrenTase()==GameResource.mSelectAnswerTask){
+			GameResource.mMainHandler.sendEmptyMessage(YouWin);
+		}else{
+			GameResource.mMainHandler.sendEmptyMessage(ShowNumber);
+		}
     }
     private void initScreenLine(){
     	Thread thread=new Thread(new Runnable() {
@@ -207,17 +218,78 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     	thread.start();
     }
     private int getSetNumber(){
-        if(GameResource.mLevelCount==0){
-			
+    	int result=0;
+        if(GameResource.mLevelCount==1){
+        	result=MathUtils.random(1, 6);
+		}else if(GameResource.mLevelCount==2){
+			result=MathUtils.random(6, 15);
+		}else if(GameResource.mLevelCount==3){
+			result=MathUtils.random(15, 30);
+		}else if(GameResource.mLevelCount==4){
+			result=MathUtils.random(30, 46);
+		}else if(GameResource.mLevelCount==5){
+			result=MathUtils.random(46, 56);
+		}else if(GameResource.mLevelCount==6){
+			result=MathUtils.random(56, 76);
+		}else if(GameResource.mLevelCount==7){
+			result=MathUtils.random(76, 86);
+		}else if(GameResource.mLevelCount==8){
+			result=MathUtils.random(86, 100);
 		}
-    	return MathUtils.random(1, 6);
+    	return result;
     }
 	private int getLevelCountToRange(){
-		if(GameResource.mLevelCount==0){
-			
+		int result=0;
+		if(GameResource.mLevelCount==1){
+			result=MathUtils.random(1, 3);
+		}else if(GameResource.mLevelCount==1){
+			result=MathUtils.random(1, 6);
+		}else{
+			result=MathUtils.random(1, 9);
 		}
 			
-		return 3;
+		return result;
+	}
+	
+	private void nextLevel(){
+		GameResource.mLevelCount++;
+		if(GameResource.mLevelCount==1){
+			GameResource.mLevelTask=30;
+		}else if(GameResource.mLevelCount==2){
+			GameResource.mLevelTask=40;
+		}else if(GameResource.mLevelCount==3){
+			GameResource.mLevelTask=50;
+		}else if(GameResource.mLevelCount==4){
+			GameResource.mLevelTask=60;
+		}else if(GameResource.mLevelCount==5){
+			GameResource.mLevelTask=70;
+		}else if(GameResource.mLevelCount==6){
+			GameResource.mLevelTask=80;
+		}else if(GameResource.mLevelCount==7){
+			GameResource.mLevelTask=90;
+		}else if(GameResource.mLevelCount==8){
+			GameResource.mLevelTask=100;
+		}
+	}
+	private static int getCurrenTase(){
+		if(GameResource.mLevelCount==1){
+			GameResource.mLevelTask=30;
+		}else if(GameResource.mLevelCount==2){
+			GameResource.mLevelTask=40;
+		}else if(GameResource.mLevelCount==3){
+			GameResource.mLevelTask=50;
+		}else if(GameResource.mLevelCount==4){
+			GameResource.mLevelTask=60;
+		}else if(GameResource.mLevelCount==5){
+			GameResource.mLevelTask=70;
+		}else if(GameResource.mLevelCount==6){
+			GameResource.mLevelTask=80;
+		}else if(GameResource.mLevelCount==7){
+			GameResource.mLevelTask=90;
+		}else if(GameResource.mLevelCount==8){
+			GameResource.mLevelTask=100;
+		}
+		return GameResource.mLevelTask;
 	}
 	private void initLittening(){
 		mStartBut.addListener(new ClickListener(){
