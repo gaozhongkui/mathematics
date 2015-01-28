@@ -165,14 +165,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					for(int i=0;i<mShowDiceActors.size();i++){
     						mShowDiceActors.get(i).runAction(false);
     					}
-    				}else if(GameResource.AnswerRight==arg0.what){   /** ¶Ô**/
-    					for(DiceActor actor:mSelectDiceActors){
-    						actor.clickDisappear();
-    						mShowDiceActors.remove(actor);
-    					}
-    					GameResource.mMainHandler.sendEmptyMessage(ShowNumber);
-    					mSelectDiceActors.clear();
-    					GameResource.mSelectCalculationCount=0;
     				}else if(GameResource.AnswerWrong==arg0.what){  /**  ´í **/
     					for(DiceActor actor:mSelectDiceActors){
     						actor.reset();
@@ -187,6 +179,17 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     				return false;
     			}
     		});
+    }
+    
+    /** ¶ÔµÄ **/
+    public static void SelectAnswerRight(){
+    	for(DiceActor actor:mSelectDiceActors){
+			actor.clickDisappear();
+			mShowDiceActors.remove(actor);
+		}
+		GameResource.mMainHandler.sendEmptyMessage(ShowNumber);
+		mSelectDiceActors.clear();
+		GameResource.mSelectCalculationCount=0;
     }
     private void initScreenLine(){
     	Thread thread=new Thread(new Runnable() {
@@ -216,7 +219,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
         if(GameResource.mLevelCount==0){
 			
 		}
-    	return MathUtils.random(10);
+    	return MathUtils.random(1, 3);
     }
 	private int getLevelCountToRange(){
 		if(GameResource.mLevelCount==0){

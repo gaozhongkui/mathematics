@@ -53,7 +53,6 @@ public class DiceActor extends BaseActor {
 	    			   if(!isDown){
 	    				   isDown=true;
 	    				   mCacheTexture=GameResource.mBorderDigital;
-	    				   
 	    				   GameResource.mSelectCalculationCount+=  mFigure;
 	    				   GameResource.mMainHandler.obtainMessage(GameResource.SelectDice, DiceActor.this).sendToTarget();
 	    			   }
@@ -65,7 +64,7 @@ public class DiceActor extends BaseActor {
 	    		int pointer, int button) {
 	    	super.touchUp(event, x, y, pointer, button);
 		    	if(GameResource.mCalculationCount==GameResource.mSelectCalculationCount){
-		    		GameResource.mMainHandler.obtainMessage(GameResource.AnswerRight).sendToTarget();
+		    		MainScreen.SelectAnswerRight();
 		    	}else if(GameResource.mCalculationCount<GameResource.mSelectCalculationCount){
 					Message message= GameResource.mMainHandler.obtainMessage(GameResource.AnswerWrong);
 					GameResource.mMainHandler.sendMessageDelayed(message, 10);

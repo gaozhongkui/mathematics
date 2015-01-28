@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 public class GameResource {
 	public static final int ALLRUNDICEACTOR=1028;
 	public static final int NEXTLINE=1032;
-	public static final int  AnswerRight=1012;
 	public static final int  AnswerWrong=1016;
 	public static final int  SelectDice=1018;
 	public static int        mLevelCount=1; /**¹Ø¿¨ **/
