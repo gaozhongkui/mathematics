@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.gaozhongkui.mathematics.GameResource;
 import com.gaozhongkui.mathematics.actor.DiceActor;
 import com.gaozhongkui.mathematics.actor.FractionActor;
 import com.gaozhongkui.mathematics.actor.LittleGirlActor;
@@ -28,30 +29,15 @@ import com.gaozhongkui.mathematics.widget.BaseScreen;
 import com.gaozhongkui.mathematics.widget.BaseTexture;
 
 public class MainScreen extends BaseScreen  implements StartWelcomeListener {
-	public static Texture[] mBorderDigitals;
-	public static Texture[] mDigitals;
-	public static Texture mBorderDigital;
-	public static Texture mError;
 	public static boolean isClick;
-	public static Boolean[][]  mDiceActors=null;
 	private static List<DiceActor>  mSelectDiceActors=new ArrayList<DiceActor>();
-	public static List<DiceActor>  mShowDiceActors=new ArrayList<DiceActor>();
+	private static List<DiceActor>  mShowDiceActors=new ArrayList<DiceActor>();
 	private static  volatile List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
-	public static int   mCalculationCount=0;   /** 计算总额 **/
-	public static int   mSelectCalculationCount=0;
 	private static final int InitColumnCount=10;
 	private static final int InitLineCount=4;
 	private static final int STARTGAME=1026;
 	private static final int GameOver=1022;
 	private static final int ShowNumber=1022;
-	public static final int  AnswerRight=1012;
-	public static final int  AnswerWrong=1016;
-	public static final int  SelectDice=1018;
-	private static int mLevelCount=1; /**关卡 **/
-	private static int mFractionCount=1; /**积分 **/
-	private static int mLevelTask=1; /**任务 **/
-	public  static final int ALLRUNDICEACTOR=1028;
-	public  static final int NEXTLINE=1032;
 	private static final int RUNDICEACTOR=1030;
 	private static int STARTPAUSETIME=200;
 	private static int STARTLINETIME=100;
@@ -62,8 +48,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     private StartPrompterActor     mPrompterActor;
     private BaseButton mStartBut;
     private HandlerThread mHandlerThread=new HandlerThread("gaozhongkui");
-    public static Handler       mHandler;
-    public static  Handler       mMainHandler;
 	@Override
 	protected void init() {
 		mBackgroud = new BaseImage("data/images/backgroud.png");
@@ -85,20 +69,19 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		mForegroundStage.addActor(mStartBut);
 		initLittening();
 		initHandler();
-		initValue();
 		resetScreen();
 	}
     @SuppressLint("UseValueOf")
 	private void initHandler(){
-    	mDiceActors=new Boolean[10][10];
-    	for(int i=0;i<mDiceActors.length;i++){
-    		for(int j=0;j<mDiceActors[i].length;j++){
-    			mDiceActors[i][j]=new Boolean(false);
+    	GameResource.mDiceActors=new Boolean[10][10];
+    	for(int i=0;i<GameResource.mDiceActors.length;i++){
+    		for(int j=0;j<GameResource.mDiceActors[i].length;j++){
+    			GameResource.mDiceActors[i][j]=new Boolean(false);
     		}
     	}
     	
     	mHandlerThread.start();
-    	mHandler=new Handler(mHandlerThread.getLooper(), new Handler.Callback() {
+    	GameResource.mHandler=new Handler(mHandlerThread.getLooper(), new Handler.Callback() {
 			@Override
 			public boolean handleMessage(Message arg0) {
 				if(STARTGAME==arg0.what){
@@ -106,24 +89,24 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 					initScreenLine();
 				}else if(RUNDICEACTOR==arg0.what){
 					for(int i=0;i<InitColumnCount;i++){
-						Message message=mMainHandler.obtainMessage();
+						Message message=GameResource.mMainHandler.obtainMessage();
 						message.what=RUNDICEACTOR;
 						message.arg1=i;
 						message.sendToTarget();
 						SystemClock.sleep(STARTLINETIME);
 					}
-				}else if(NEXTLINE==arg0.what){
+				}else if(GameResource.NEXTLINE==arg0.what){
 					DiceActor actor=(DiceActor) arg0.obj;
 				    mFristDiceActors.remove(actor);
 					mShowDiceActors.add(actor);
 					boolean pand=false;
 					boolean isStriving=false;
-					for(int i=0;i<mDiceActors[0].length;i++){
-						if(mDiceActors[i][0]){
+					for(int i=0;i<GameResource.mDiceActors[0].length;i++){
+						if(GameResource.mDiceActors[i][0]){
 							pand=true;
 							break;
 						}
-						if(mDiceActors[i][3]){
+						if(GameResource.mDiceActors[i][3]){
 							isStriving=true;
 						}
 					}
@@ -138,7 +121,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 							for(j=0;j<InitColumnCount;j++){
 								int figure=MathUtils.random(1, getLevelCountToRange());
 								DiceActor diceActor=new DiceActor(figure, j);
-								Message message=mMainHandler.obtainMessage();
+								Message message=GameResource.mMainHandler.obtainMessage();
 								message.what=STARTGAME;
 								message.obj=diceActor;
 								message.sendToTarget();
@@ -146,14 +129,14 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 							}
 							if(j>=InitColumnCount){
 								for(j=0;j<InitColumnCount;j++){
-									Message message=mMainHandler.obtainMessage();
+									Message message=GameResource.mMainHandler.obtainMessage();
 									message.what=RUNDICEACTOR;
 									message.arg1=j;
 									message.sendToTarget();
 								}
 							}
 						}else{
-							mHandler.sendEmptyMessage(GameOver);
+							GameResource.mHandler.sendEmptyMessage(GameOver);
 						}
 						
 					}
@@ -164,7 +147,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 				return false;
 			}
 		});
-    	 mMainHandler=new Handler(GameUtils.getInstance().getContext().getMainLooper(), new Handler.Callback() {
+    	GameResource.mMainHandler=new Handler(GameUtils.getInstance().getContext().getMainLooper(), new Handler.Callback() {
     			
     			@Override
     			public boolean handleMessage(Message arg0) {
@@ -176,29 +159,29 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					DiceActor diceActor=mFristDiceActors.get(arg0.arg1);
     					diceActor.runAction(true);
     				}else if(ShowNumber==arg0.what){
-    					mCalculationCount=getSetNumber();
-    					mGirlActor.showNumber(mCalculationCount);
-    				}else if(ALLRUNDICEACTOR==arg0.what){
+    					GameResource.mCalculationCount=getSetNumber();
+    					mGirlActor.showNumber(GameResource.mCalculationCount);
+    				}else if(GameResource.ALLRUNDICEACTOR==arg0.what){
     					DiceActor actor=(DiceActor) arg0.obj;
     					mShowDiceActors.remove(actor);
     					for(int i=0;i<mShowDiceActors.size();i++){
     						mShowDiceActors.get(i).runAction(false);
     					}
-    				}else if(AnswerRight==arg0.what){   /** 对**/
+    				}else if(GameResource.AnswerRight==arg0.what){   /** 对**/
     					for(DiceActor actor:mSelectDiceActors){
     						actor.clickDisappear();
     						mShowDiceActors.remove(actor);
     					}
-    					mMainHandler.sendEmptyMessage(ShowNumber);
+    					GameResource.mMainHandler.sendEmptyMessage(ShowNumber);
     					mSelectDiceActors.clear();
-    					mSelectCalculationCount=0;
-    				}else if(AnswerWrong==arg0.what){  /**  错 **/
+    					GameResource.mSelectCalculationCount=0;
+    				}else if(GameResource.AnswerWrong==arg0.what){  /**  错 **/
     					for(DiceActor actor:mSelectDiceActors){
     						actor.reset();
     					}
     					mSelectDiceActors.clear();
-    					mSelectCalculationCount=0;
-    				}else if(SelectDice==arg0.what){  /** 选择 **/
+    					GameResource.mSelectCalculationCount=0;
+    				}else if(GameResource.SelectDice==arg0.what){  /** 选择 **/
     					DiceActor actor=(DiceActor) arg0.obj;
     					mSelectDiceActors.add(actor);
     				}
@@ -216,60 +199,40 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 				for(int j=0;j<InitColumnCount;j++){
 					int figure=MathUtils.random(1, getLevelCountToRange());
 					DiceActor diceActor=new DiceActor(figure, j);
-					Message message=mMainHandler.obtainMessage();
+					Message message=GameResource.mMainHandler.obtainMessage();
 					message.what=STARTGAME;
 					message.obj=diceActor;
 					message.sendToTarget();
 					SystemClock.sleep(STARTPAUSETIME);
 				}
-				mHandler.sendEmptyMessage(RUNDICEACTOR);
+				GameResource.mHandler.sendEmptyMessage(RUNDICEACTOR);
 				SystemClock.sleep(STARTLINETIME*InitLineCount);
 			 }
-			mMainHandler.sendEmptyMessage(ShowNumber);
+			GameResource.mMainHandler.sendEmptyMessage(ShowNumber);
 			isClick=true;
 			}
 		});
     	thread.start();
     }
     private int getSetNumber(){
-        if(mLevelCount==0){
+        if(GameResource.mLevelCount==0){
 			
 		}
     	return MathUtils.random(10);
     }
 	private int getLevelCountToRange(){
-		if(mLevelCount==0){
+		if(GameResource.mLevelCount==0){
 			
 		}
 			
 		return 3;
 	}
-	 private void initValue(){
-		   if (mBorderDigitals == null) {
-				mBorderDigitals = new BaseTexture[9];
-				for (int i = 0; i < mBorderDigitals.length; i++) {
-					mBorderDigitals[i] = new BaseTexture("data/images/dice/borderdigital" + (i + 1) + ".png");
-				}
-			}
-			if (mDigitals == null) {
-				mDigitals = new BaseTexture[9];
-				for (int i = 0; i < mDigitals.length; i++) {
-					mDigitals[i] = new BaseTexture("data/images/dice/digital" + (i + 1)+ ".png");
-				}
-			}
-			if (mBorderDigital == null) {
-				mBorderDigital=new BaseTexture("data/images/dice/borderdigital.png");
-			}
-			if(mError==null){
-				mError=new BaseTexture("data/images/dice/error.png");
-			}
-	   }
 	private void initLittening(){
 		mStartBut.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				super.clicked(event, x, y);
-				mHandler.obtainMessage(STARTGAME).sendToTarget();
+				GameResource.mHandler.obtainMessage(STARTGAME).sendToTarget();
 			}
 		});
 	}
@@ -310,7 +273,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	
 	private void resetScreen(){
 		isClick=false;
-		mCalculationCount=0;
+		GameResource.mCalculationCount=0;
 		mFristDiceActors.clear();
 		mSelectDiceActors.clear();
 		mStartWelcomeActor.startAction();

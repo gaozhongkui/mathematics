@@ -1,9 +1,5 @@
 package com.gaozhongkui.mathematics.actor;
 
-import static com.gaozhongkui.mathematics.screen.MainScreen.mBorderDigital;
-import static com.gaozhongkui.mathematics.screen.MainScreen.mBorderDigitals;
-import static com.gaozhongkui.mathematics.screen.MainScreen.mDiceActors;
-import static com.gaozhongkui.mathematics.screen.MainScreen.mDigitals;
 import android.graphics.PointF;
 import android.os.Message;
 
@@ -11,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.gaozhongkui.mathematics.GameResource;
 import com.gaozhongkui.mathematics.screen.MainScreen;
 import com.gaozhongkui.mathematics.widget.BaseActor;
 
@@ -37,8 +34,8 @@ public class DiceActor extends BaseActor {
 		super();
 		mFigure=figure;
 		mPostion=postion;
-		mCacheTexture=mBorderDigitals[figure-1];
-		mCacheDigitalTexture=mDigitals[figure-1];
+		mCacheTexture=GameResource.mBorderDigitals[figure-1];
+		mCacheDigitalTexture=GameResource.mDigitals[figure-1];
 		this.mStartPoint=new PointF(mOriginalX+(postion*mBorderWidth), mOriginalY);
 		setPosition(mStartPoint.x, mStartPoint.y);
 	}
@@ -55,10 +52,10 @@ public class DiceActor extends BaseActor {
 	    		   if(MainScreen.isClick){
 	    			   if(!isDown){
 	    				   isDown=true;
-	    				   mCacheTexture=mBorderDigital;
+	    				   mCacheTexture=GameResource.mBorderDigital;
 	    				   
-			    		   MainScreen.mSelectCalculationCount+=  mFigure;
-			    		   MainScreen.mMainHandler.obtainMessage(MainScreen.SelectDice, DiceActor.this).sendToTarget();
+	    				   GameResource.mSelectCalculationCount+=  mFigure;
+	    				   GameResource.mMainHandler.obtainMessage(GameResource.SelectDice, DiceActor.this).sendToTarget();
 	    			   }
 	    		   }
 	    		return true;
@@ -67,12 +64,11 @@ public class DiceActor extends BaseActor {
 	    public void touchUp(InputEvent event, float x, float y,
 	    		int pointer, int button) {
 	    	super.touchUp(event, x, y, pointer, button);
-		    	if(MainScreen.mCalculationCount==MainScreen.mSelectCalculationCount){
-		    		  MainScreen.mMainHandler.obtainMessage(MainScreen.AnswerRight).sendToTarget();
-		    	}else if(MainScreen.mCalculationCount<MainScreen.mSelectCalculationCount){
-					Message message= MainScreen.mMainHandler.obtainMessage(MainScreen.AnswerWrong);
-					MainScreen.mMainHandler.sendMessageAtTime(message, 10);
-		    	//	isError=true;
+		    	if(GameResource.mCalculationCount==GameResource.mSelectCalculationCount){
+		    		GameResource.mMainHandler.obtainMessage(GameResource.AnswerRight).sendToTarget();
+		    	}else if(GameResource.mCalculationCount<GameResource.mSelectCalculationCount){
+					Message message= GameResource.mMainHandler.obtainMessage(GameResource.AnswerWrong);
+					GameResource.mMainHandler.sendMessageAtTime(message, 10);
 		    	}
 	        }
 	       });	
@@ -87,7 +83,7 @@ public class DiceActor extends BaseActor {
 	        }
 		}
 		if(isError){
-			batch.draw(MainScreen.mError, getX()+(getWidth()/2-MainScreen.mError.getWidth()/2), getY()+(getHeight()/2-MainScreen.mError.getHeight()/2));	
+			batch.draw(GameResource.mError, getX()+(getWidth()/2-GameResource.mError.getWidth()/2), getY()+(getHeight()/2-GameResource.mError.getHeight()/2));	
 		}
       
 	}
@@ -98,15 +94,15 @@ public class DiceActor extends BaseActor {
     	isFristRun=isfrist;
     	int count=0;
     	for(int i=9;i>=mLineX;i--){
-    	 boolean pand=mDiceActors[mPostion][i];
+    	 boolean pand=GameResource.mDiceActors[mPostion][i];
     	  if(!pand){
-    		  mDiceActors[mPostion][i]=true;
+    		  GameResource.mDiceActors[mPostion][i]=true;
     		  count=(i+1);
     		  mIntervalDistance=((mBorderWidth*count)+mLineInterval)-(mOriginalY-mStartPoint.y);
   	    	  if(isfrist){
   	    		 mDuration=(count*mInitDuration)+mInitLineIntervalDuration;
   	    	  }else{
-  	    		 mDiceActors[mPostion][mLineX]=false;
+  	    		GameResource.mDiceActors[mPostion][mLineX]=false;
   	    		 mDuration=((count-mLineX)*mInitDuration);
   	    	  }
   	    	  mLineX=i;
@@ -117,17 +113,17 @@ public class DiceActor extends BaseActor {
     }
     
     public void clickDisappear(){
-    	mDiceActors[mPostion][mLineX]=false;
+    	GameResource.mDiceActors[mPostion][mLineX]=false;
     	removeDice();
-    	Message message=MainScreen.mMainHandler.obtainMessage();
-    	message.what=MainScreen.ALLRUNDICEACTOR;
+    	Message message=GameResource.mMainHandler.obtainMessage();
+    	message.what=GameResource.ALLRUNDICEACTOR;
     	message.obj=this;
     	message.sendToTarget();
     }
 	public void reset(){
 		isError=false;
 		isDown=false;
-		mCacheTexture=mBorderDigitals[mFigure-1];
+		mCacheTexture=GameResource.mBorderDigitals[mFigure-1];
 	}
 	public int getmFigure() {
 		return mFigure;
@@ -142,8 +138,8 @@ public class DiceActor extends BaseActor {
 				setY(mStartPoint.y-mIntervalDistance);
 				mStartPoint.y=getY();
 				if(isFristRun){
-					Message message=MainScreen.mHandler.obtainMessage();
-					message.what=MainScreen.NEXTLINE;
+					Message message=GameResource.mHandler.obtainMessage();
+					message.what=GameResource.NEXTLINE;
 					message.obj=this;
 					message.sendToTarget();
 				}

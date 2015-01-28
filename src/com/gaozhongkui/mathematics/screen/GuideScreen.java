@@ -2,9 +2,11 @@ package com.gaozhongkui.mathematics.screen;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.gaozhongkui.mathematics.GameResource;
 import com.gaozhongkui.mathematics.widget.BaseButton;
 import com.gaozhongkui.mathematics.widget.BaseImage;
 import com.gaozhongkui.mathematics.widget.BaseScreen;
+import com.gaozhongkui.mathematics.widget.BaseTexture;
 
 public class GuideScreen extends BaseScreen {
 	private BaseButton  mStartButton;
@@ -21,6 +23,7 @@ public class GuideScreen extends BaseScreen {
 		mBackgroudStage.addActor(mStartButton);
 		mBackgroudStage.addActor(mIntroduceButton);
 		initListener();
+		initValue();
 	}
 	
 	
@@ -40,7 +43,26 @@ public class GuideScreen extends BaseScreen {
 			}
 		});
 	}
-
+	 private void initValue(){
+		   if (GameResource.mBorderDigitals == null) {
+			   GameResource.mBorderDigitals = new BaseTexture[9];
+				for (int i = 0; i < GameResource.mBorderDigitals.length; i++) {
+					GameResource.mBorderDigitals[i] = new BaseTexture("data/images/dice/borderdigital" + (i + 1) + ".png");
+				}
+			}
+			if (GameResource.mDigitals == null) {
+				GameResource.mDigitals = new BaseTexture[9];
+				for (int i = 0; i < GameResource.mDigitals.length; i++) {
+					GameResource.mDigitals[i] = new BaseTexture("data/images/dice/digital" + (i + 1)+ ".png");
+				}
+			}
+			if (GameResource.mBorderDigital == null) {
+				GameResource.mBorderDigital=new BaseTexture("data/images/dice/borderdigital.png");
+			}
+			if(GameResource.mError==null){
+				GameResource.mError=new BaseTexture("data/images/dice/error.png");
+			}
+	   }
 	@Override
 	protected void draw(float delta) {
 
