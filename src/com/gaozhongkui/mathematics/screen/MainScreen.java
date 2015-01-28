@@ -219,7 +219,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
         if(GameResource.mLevelCount==0){
 			
 		}
-    	return MathUtils.random(1, 3);
+    	return MathUtils.random(1, 6);
     }
 	private int getLevelCountToRange(){
 		if(GameResource.mLevelCount==0){
