@@ -30,6 +30,7 @@ public class DiceActor extends BaseActor {
 	private boolean isRun;
 	private boolean isError;
 	private boolean isFristRun;
+	private boolean isStartRun;
 	public DiceActor(int figure,int postion) {
 		super();
 		mFigure=figure;
@@ -115,10 +116,6 @@ public class DiceActor extends BaseActor {
     public void clickDisappear(){
     	GameResource.mDiceActors[mPostion][mLineX]=false;
     	removeDice();
-    	Message message=GameResource.mMainHandler.obtainMessage();
-    	message.what=GameResource.ALLRUNDICEACTOR;
-    	message.obj=this;
-    	message.sendToTarget();
     }
 	public void reset(){
 		isError=false;
@@ -137,7 +134,9 @@ public class DiceActor extends BaseActor {
 				mPercent=0;
 				setY(mStartPoint.y-mIntervalDistance);
 				mStartPoint.y=getY();
+				isStartRun=true;
 				if(isFristRun){
+					isFristRun=false;
 					Message message=GameResource.mHandler.obtainMessage();
 					message.what=GameResource.NEXTLINE;
 					message.obj=this;
@@ -148,6 +147,9 @@ public class DiceActor extends BaseActor {
 				setY(mStartPoint.y-mIntervalDistance*p);
 			}
 			
+		}
+		if(isStartRun){
+			runAction(false);
 		}
 	}
 	

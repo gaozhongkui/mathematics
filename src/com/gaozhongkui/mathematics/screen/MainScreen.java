@@ -29,7 +29,6 @@ import com.gaozhongkui.mathematics.widget.BaseScreen;
 public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	public static boolean isClick;
 	private static List<DiceActor>  mSelectDiceActors=new ArrayList<DiceActor>();
-	private static List<DiceActor>  mShowDiceActors=new ArrayList<DiceActor>();
 	private static  volatile List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
 	private static final int InitColumnCount=10;
 	private static final int InitLineCount=4;
@@ -96,7 +95,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 				}else if(GameResource.NEXTLINE==arg0.what){
 					DiceActor actor=(DiceActor) arg0.obj;
 				    mFristDiceActors.remove(actor);
-					mShowDiceActors.add(actor);
 					boolean pand=false;
 					boolean isStriving=false;
 					for(int i=0;i<GameResource.mDiceActors[0].length;i++){
@@ -159,12 +157,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     				}else if(ShowNumber==arg0.what){
     					GameResource.mCalculationCount=getSetNumber();
     					mGirlActor.showNumber(GameResource.mCalculationCount);
-    				}else if(GameResource.ALLRUNDICEACTOR==arg0.what){
-    					DiceActor actor=(DiceActor) arg0.obj;
-    					mShowDiceActors.remove(actor);
-    					for(int i=0;i<mShowDiceActors.size();i++){
-    						mShowDiceActors.get(i).runAction(false);
-    					}
     				}else if(GameResource.AnswerWrong==arg0.what){  /**  ´í **/
     					for(DiceActor actor:mSelectDiceActors){
     						actor.reset();
@@ -185,7 +177,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     public static void SelectAnswerRight(){
     	for(DiceActor actor:mSelectDiceActors){
 			actor.clickDisappear();
-			mShowDiceActors.remove(actor);
 		}
 		GameResource.mMainHandler.sendEmptyMessage(ShowNumber);
 		mSelectDiceActors.clear();
@@ -278,14 +269,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		mFristDiceActors.clear();
 		mSelectDiceActors.clear();
 		mStartWelcomeActor.startAction();
-		clearAllDice();
 		HidePromterActor();
 	}
 	
-	private void clearAllDice(){
-		for(DiceActor diceActor:mShowDiceActors){
-			diceActor.clear();
-		}
-		mShowDiceActors.clear();
-	}
 }
