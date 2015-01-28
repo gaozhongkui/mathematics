@@ -9,7 +9,6 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.os.SystemClock;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -18,15 +17,14 @@ import com.gaozhongkui.mathematics.GameResource;
 import com.gaozhongkui.mathematics.actor.DiceActor;
 import com.gaozhongkui.mathematics.actor.FractionActor;
 import com.gaozhongkui.mathematics.actor.LittleGirlActor;
+import com.gaozhongkui.mathematics.actor.LittleGirlActor.GirlState;
 import com.gaozhongkui.mathematics.actor.StartPrompterActor;
 import com.gaozhongkui.mathematics.actor.StartWelcomeActor;
-import com.gaozhongkui.mathematics.actor.LittleGirlActor.GirlState;
 import com.gaozhongkui.mathematics.actor.StartWelcomeActor.StartWelcomeListener;
 import com.gaozhongkui.mathematics.utils.GameUtils;
 import com.gaozhongkui.mathematics.widget.BaseButton;
 import com.gaozhongkui.mathematics.widget.BaseImage;
 import com.gaozhongkui.mathematics.widget.BaseScreen;
-import com.gaozhongkui.mathematics.widget.BaseTexture;
 
 public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	public static boolean isClick;

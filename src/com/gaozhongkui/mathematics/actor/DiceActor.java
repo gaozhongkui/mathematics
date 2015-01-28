@@ -67,8 +67,10 @@ public class DiceActor extends BaseActor {
 		    	if(GameResource.mCalculationCount==GameResource.mSelectCalculationCount){
 		    		GameResource.mMainHandler.obtainMessage(GameResource.AnswerRight).sendToTarget();
 		    	}else if(GameResource.mCalculationCount<GameResource.mSelectCalculationCount){
+		    		GameResource.mCalculationCount=0;
 					Message message= GameResource.mMainHandler.obtainMessage(GameResource.AnswerWrong);
 					GameResource.mMainHandler.sendMessageAtTime(message, 10);
+					isError=true;
 		    	}
 	        }
 	       });	
