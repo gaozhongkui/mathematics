@@ -36,6 +36,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private static final int ShowNumber=1022;
 	private static final int YouWin=1068;
 	private static final int RUNDICEACTOR=1030;
+	private static final int GirlStateJudge=1006;
 	private static int STARTPAUSETIME=600;
 	private static int STARTLINETIME=520;
 	private Image mDrawingBoard;
@@ -101,28 +102,15 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	                    	 mFristDiceActors.remove(actor);
 						}
 						boolean pand=false;
-						boolean isStriving=false;
 						for(int i=0;i<GameResource.mDiceActors[0].length;i++){
 							if(GameResource.mDiceActors[i][0]){
 								pand=true;
 								break;
 							}
-							if(GameResource.mDiceActors[i][3]){
-								isStriving=true;
-							}
 						}
 						if(pand){
 							GameResource.mMainHandler.sendEmptyMessage(GameOver);
 						}else{
-							if(isStriving){
-								if(mGirlActor.getmGirlState()!=GirlState.Striving){
-									mGirlActor.setmGirlState(GirlState.Striving);
-								}
-							}else{
-								if(mGirlActor.getmGirlState()!=GirlState.Thinking){
-									mGirlActor.setmGirlState(GirlState.Thinking);
-								}
-							}
 							if(mFristDiceActors.isEmpty()){
 									int j=0;
 									for(j=0;j<InitColumnCount;j++){
@@ -177,12 +165,29 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					mSelectDiceActors.add(actor);
     				}else if(GameOver==arg0.what){
     					mGirlActor.setmGirlState(GirlState.Failed);
+    					GameResource.isClick=false;
     					GameResource.mGameState=GameState.Failed;
-    					System.out.println("ÓÎÏ·½áÊø");
     				}else if(YouWin==arg0.what){
     					mGirlActor.setmGirlState(GirlState.Win);
+    					GameResource.isClick=false;
     					GameResource.mGameState=GameState.Win;
-    					System.out.println("ÄãÓ®ÁË");
+    					
+    				}else if(GirlStateJudge==arg0.what){
+    					boolean isStriving=false;
+    					for(int i=0;i<GameResource.mDiceActors[0].length;i++){
+    					  if(GameResource.mDiceActors[i][3]){
+							isStriving=true;
+						  }
+    					}
+    					if(isStriving){
+							if(mGirlActor.getmGirlState()!=GirlState.Striving){
+								mGirlActor.setmGirlState(GirlState.Striving);
+							}
+						}else{
+							if(mGirlActor.getmGirlState()!=GirlState.Thinking){
+								mGirlActor.setmGirlState(GirlState.Thinking);
+							}
+						}
     				}
     			}
     				return false;
@@ -205,6 +210,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		}else{
 			GameResource.mMainHandler.sendEmptyMessage(ShowNumber);
 		}
+		GameResource.mMainHandler.sendEmptyMessage(GirlStateJudge);
     }
     private void initScreenLine(){
     	Thread thread=new Thread(new Runnable() {
