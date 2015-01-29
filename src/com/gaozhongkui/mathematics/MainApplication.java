@@ -60,14 +60,12 @@ public class MainApplication extends AndroidApplication {
 		PowerManagerUtils.getInstance().releaseWakeLock();
 	}
 	
-	/*@Override
+	@Override
 	public void onBackPressed() {
-		// 如果有需要，可以点击后退关闭插播广告。
-		if (!SpotManager.getInstance(this).disMiss()) {
-			// 弹出退出窗口，可以使用自定义退屏弹出和回退动画,参照demo,若不使用动画，传入-1
+		/*if (!SpotManager.getInstance(this).disMiss()) {
 			super.onBackPressed();
-		}
-	}*/
+		}*/
+	}
 	@Override
 	protected void onStop() {
 		SpotManager.getInstance(this).onStop();
