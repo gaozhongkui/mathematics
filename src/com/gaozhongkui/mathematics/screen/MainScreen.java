@@ -42,6 +42,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private static final int RUNDICEACTOR=1030;
 	private static final int GirlStateJudge=1006;
 	private static final int ShowAdvertisement=1086;
+	private static final int PreparationMusic=1168;
 	private static int STARTPAUSETIME=600;
 	private static int STARTLINETIME=520;
 	private Image mDrawingBoard;
@@ -74,7 +75,10 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		initHandler();
 		nextLevel();
 		resetScreen();
-		GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
+	//	GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
+		GameResource.mBackGroudMusic.setLooping(true);
+		GameResource.mBackGroudMusic.play();
+		GameResource.mMainHandler.sendEmptyMessageDelayed(PreparationMusic, 10);
 	}
     @SuppressLint("UseValueOf")
 	private void initHandler(){
@@ -166,6 +170,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					}
     					mSelectDiceActors.clear();
     					GameResource.mSelectCalculationCount=0;
+    					GameResource.mEliminateFailedMusic.play();
     				}else if(GameResource.SelectDice==arg0.what){  /** Ñ¡Ôñ **/
     					DiceActor actor=(DiceActor) arg0.obj;
     					mSelectDiceActors.add(actor);
@@ -173,11 +178,12 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					mGirlActor.setmGirlState(GirlState.Failed);
     					GameResource.isClick=false;
     					GameResource.mGameState=GameState.Failed;
+    					GameResource.mFailedMusic.play();
     				}else if(YouWin==arg0.what){
     					mGirlActor.setmGirlState(GirlState.Win);
     					GameResource.isClick=false;
     					GameResource.mGameState=GameState.Win;
-    					
+    					GameResource.mWinGroudMusic.play();
     				}else if(GirlStateJudge==arg0.what){
     					boolean isStriving=false;
     					for(int i=0;i<GameResource.mDiceActors[0].length;i++){
@@ -212,6 +218,8 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     						}
 
     					});
+    				}else if(PreparationMusic==arg0.what){
+    					GameResource.mPreparationMusic.play();
     				}
     			}
     				return false;
@@ -235,6 +243,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 			GameResource.mMainHandler.sendEmptyMessage(ShowNumber);
 		}
 		GameResource.mMainHandler.sendEmptyMessage(GirlStateJudge);
+		GameResource.mEliminateMusic.play();
     }
     private void initScreenLine(){
     	Thread thread=new Thread(new Runnable() {
@@ -364,6 +373,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	@Override
 	public void hide() {
 		mHandlerThread.quit();
+		GameResource.mBackGroudMusic.pause();
 	}
 
 	@Override

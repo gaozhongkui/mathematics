@@ -1,5 +1,6 @@
 package com.gaozhongkui.mathematics.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gaozhongkui.mathematics.GameResource;
@@ -62,6 +63,12 @@ public class GuideScreen extends BaseScreen {
 			if(GameResource.mError==null){
 				GameResource.mError=new BaseTexture("data/images/dice/error.png");
 			}
+		  GameResource.mBackGroudMusic=Gdx.audio.newMusic(Gdx.files.internal("data/sounds/backgroud.mp3"));
+		  GameResource.mPreparationMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/preparation.mp3"));
+		  GameResource.mEliminateFailedMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/eliminatefailed.mp3"));
+		  GameResource.mEliminateMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/eliminate.mp3"));
+		  GameResource.mFailedMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/failed.mp3"));
+		  GameResource.mWinGroudMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/win.mp3"));
 	   }
 	@Override
 	protected void draw(float delta) {

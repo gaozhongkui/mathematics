@@ -1,10 +1,8 @@
 package com.gaozhongkui.mathematics;
 
 import net.youmi.android.AdManager;
-import net.youmi.android.spot.SpotDialogListener;
 import net.youmi.android.spot.SpotManager;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;

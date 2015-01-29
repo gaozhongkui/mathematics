@@ -2,6 +2,8 @@ package com.gaozhongkui.mathematics;
 
 import android.os.Handler;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.gaozhongkui.mathematics.screen.MainScreen.GameState;
 
@@ -23,6 +25,12 @@ public class GameResource {
 	public static Texture[]    mDigitals;
 	public static Texture      mBorderDigital;
 	public static Texture      mError;
-    public static  GameState  mGameState;
+    public static GameState  mGameState;
+    public static  Music      mBackGroudMusic;
+    public static  Sound      mEliminateMusic;//Ïû³ý
+    public static  Sound      mEliminateFailedMusic;//Ïû³ýÊ§°Ü
+    public static  Sound      mFailedMusic;     //Ê§°Ü
+    public static  Sound      mPreparationMusic; //×¼±¸
+    public static  Sound      mWinGroudMusic;   //Ó®
 
 }
