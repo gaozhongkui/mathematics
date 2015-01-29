@@ -31,7 +31,7 @@ public class MainApplication extends AndroidApplication {
 		// 插屏出现动画效果，0:ANIM_NONE为无动画，1:ANIM_SIMPLE为简单动画效果，2:ANIM_ADVANCE为高级动画效果
 		SpotManager.getInstance(this).setAnimationType(SpotManager.ANIM_ADVANCE);
 		// 设置插屏动画的横竖屏展示方式，如果设置了横屏，则在有广告资源的情况下会是优先使用横屏图。
-		SpotManager.getInstance(this).setSpotOrientation(SpotManager.ORIENTATION_PORTRAIT);
+		SpotManager.getInstance(this).setSpotOrientation(SpotManager.ORIENTATION_LANDSCAPE);
 		// 展示插播广告，可以不调用loadSpot独立使用
 		SpotManager.getInstance(this).showSpotAds(this, new SpotDialogListener() {
 					@Override
@@ -49,7 +49,7 @@ public class MainApplication extends AndroidApplication {
 						Log.i("YoumiAdDemo", "展示关闭");
 					}
 
-				}); // //
+				}); 
 
 	}
 
@@ -70,7 +70,6 @@ public class MainApplication extends AndroidApplication {
 	}*/
 	@Override
 	protected void onStop() {
-		// 如果不调用此方法，则按home键的时候会出现图标无法显示的情况。
 		SpotManager.getInstance(this).onStop();
 		super.onStop();
 	}
