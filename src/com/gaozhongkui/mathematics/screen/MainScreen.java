@@ -82,6 +82,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     	GameResource.mHandler=new Handler(mHandlerThread.getLooper(), new Handler.Callback() {
 			@Override
 			public boolean handleMessage(Message arg0) {
+			if(GameResource.mGameState==GameState.None){
 				if(STARTGAME==arg0.what){
 					HidePromterActor();
 					initScreenLine();
@@ -94,7 +95,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 						SystemClock.sleep(STARTLINETIME);
 					}
 				}else if(GameResource.NEXTLINE==arg0.what){
-					if(GameResource.mGameState!=GameState.None){
+					
 						DiceActor actor=(DiceActor) arg0.obj;
 	                    if(actor!=null){
 	                    	 mFristDiceActors.remove(actor);
@@ -154,6 +155,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     			
     			@Override
     			public boolean handleMessage(Message arg0) {
+    			if(GameResource.mGameState==GameState.None){
     				if(STARTGAME==arg0.what){              //ÃÌº”
     					 DiceActor diceActor=(DiceActor) arg0.obj;
     					 mBackgroudStage.addActor(diceActor); 
@@ -182,7 +184,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					GameResource.mGameState=GameState.Win;
     					System.out.println("ƒ„”Æ¡À");
     				}
-    				
+    			}
     				return false;
     			}
     		});
