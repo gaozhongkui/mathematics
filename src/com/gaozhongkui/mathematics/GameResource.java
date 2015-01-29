@@ -3,6 +3,7 @@ package com.gaozhongkui.mathematics;
 import android.os.Handler;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.gaozhongkui.mathematics.screen.MainScreen.GameState;
 
 public class GameResource {
 	public static final int NEXTLINE=1032;
@@ -22,4 +23,6 @@ public class GameResource {
 	public static Texture[]    mDigitals;
 	public static Texture      mBorderDigital;
 	public static Texture      mError;
+    public static  GameState  mGameState;
+
 }

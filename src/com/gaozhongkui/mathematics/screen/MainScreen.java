@@ -94,54 +94,58 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 						SystemClock.sleep(STARTLINETIME);
 					}
 				}else if(GameResource.NEXTLINE==arg0.what){
-					DiceActor actor=(DiceActor) arg0.obj;
-                    if(actor!=null){
-                    	 mFristDiceActors.remove(actor);
-					}
-					boolean pand=false;
-					boolean isStriving=false;
-					for(int i=0;i<GameResource.mDiceActors[0].length;i++){
-						if(GameResource.mDiceActors[i][0]){
-							pand=true;
-							break;
+					if(GameResource.mGameState!=GameState.None){
+						DiceActor actor=(DiceActor) arg0.obj;
+	                    if(actor!=null){
+	                    	 mFristDiceActors.remove(actor);
 						}
-						if(GameResource.mDiceActors[i][3]){
-							isStriving=true;
-						}
-					}
-					if(pand){
-						GameResource.mMainHandler.sendEmptyMessage(GameOver);
-					}else{
-						if(isStriving){
-							if(mGirlActor.getmGirlState()!=GirlState.Striving){
-								mGirlActor.setmGirlState(GirlState.Striving);
+						boolean pand=false;
+						boolean isStriving=false;
+						for(int i=0;i<GameResource.mDiceActors[0].length;i++){
+							if(GameResource.mDiceActors[i][0]){
+								pand=true;
+								break;
 							}
+							if(GameResource.mDiceActors[i][3]){
+								isStriving=true;
+							}
+						}
+						if(pand){
+							GameResource.mMainHandler.sendEmptyMessage(GameOver);
 						}else{
-							if(mGirlActor.getmGirlState()!=GirlState.Thinking){
-								mGirlActor.setmGirlState(GirlState.Thinking);
-							}
-						}
-						if(mFristDiceActors.isEmpty()){
-								int j=0;
-								for(j=0;j<InitColumnCount;j++){
-									int figure=MathUtils.random(1, getLevelCountToRange());
-									DiceActor diceActor=new DiceActor(figure, j);
-									Message message=GameResource.mMainHandler.obtainMessage();
-									message.what=STARTGAME;
-									message.obj=diceActor;
-									message.sendToTarget();
-									SystemClock.sleep(STARTPAUSETIME);
+							if(isStriving){
+								if(mGirlActor.getmGirlState()!=GirlState.Striving){
+									mGirlActor.setmGirlState(GirlState.Striving);
 								}
-								if(j>=InitColumnCount){
+							}else{
+								if(mGirlActor.getmGirlState()!=GirlState.Thinking){
+									mGirlActor.setmGirlState(GirlState.Thinking);
+								}
+							}
+							if(mFristDiceActors.isEmpty()){
+									int j=0;
 									for(j=0;j<InitColumnCount;j++){
+										int figure=MathUtils.random(1, getLevelCountToRange());
+										DiceActor diceActor=new DiceActor(figure, j);
 										Message message=GameResource.mMainHandler.obtainMessage();
-										message.what=RUNDICEACTOR;
-										message.arg1=j;
+										message.what=STARTGAME;
+										message.obj=diceActor;
 										message.sendToTarget();
+										SystemClock.sleep(STARTPAUSETIME);
+									}
+									if(j>=InitColumnCount){
+										for(j=0;j<InitColumnCount;j++){
+											Message message=GameResource.mMainHandler.obtainMessage();
+											message.what=RUNDICEACTOR;
+											message.arg1=j;
+											message.sendToTarget();
+										}
 									}
 								}
 							}
-						}
+					
+					}
+					
 				}
 				return false;
 			}
@@ -171,9 +175,11 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					mSelectDiceActors.add(actor);
     				}else if(GameOver==arg0.what){
     					mGirlActor.setmGirlState(GirlState.Failed);
+    					GameResource.mGameState=GameState.Failed;
     					System.out.println("ÓÎÏ·½áÊø");
     				}else if(YouWin==arg0.what){
     					mGirlActor.setmGirlState(GirlState.Win);
+    					GameResource.mGameState=GameState.Win;
     					System.out.println("ÄãÓ®ÁË");
     				}
     				
@@ -344,12 +350,17 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	}
 	
 	private void resetScreen(){
+		GameResource.mGameState=GameState.None;
 		GameResource.isClick=false;
 		GameResource.mCalculationCount=0;
 		mFristDiceActors.clear();
 		mSelectDiceActors.clear();
 		mStartWelcomeActor.startAction();
 		HidePromterActor();
+	}
+	
+	public enum GameState{
+		None,Win,Failed
 	}
 	
 }
