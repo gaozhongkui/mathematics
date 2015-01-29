@@ -14,6 +14,7 @@ public class GameResource {
 	public static int        mCalculationCount=0;   /** ¼ÆËã×Ü¶î **/
 	public static int        mSelectCalculationCount=0;
 	public static int        mSelectAnswerTask=0;
+	public static boolean      isClick;
 	public static Handler       mHandler;
 	public static  Handler       mMainHandler;
 	public static Boolean[][]  mDiceActors=null;

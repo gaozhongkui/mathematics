@@ -27,7 +27,6 @@ import com.gaozhongkui.mathematics.widget.BaseImage;
 import com.gaozhongkui.mathematics.widget.BaseScreen;
 
 public class MainScreen extends BaseScreen  implements StartWelcomeListener {
-	public static boolean isClick;
 	private static List<DiceActor>  mSelectDiceActors=new ArrayList<DiceActor>();
 	private static  volatile List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
 	private static final int InitColumnCount=10;
@@ -37,8 +36,8 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private static final int ShowNumber=1022;
 	private static final int YouWin=1068;
 	private static final int RUNDICEACTOR=1030;
-	private static int STARTPAUSETIME=200;
-	private static int STARTLINETIME=100;
+	private static int STARTPAUSETIME=600;
+	private static int STARTLINETIME=520;
 	private Image mDrawingBoard;
     private FractionActor mFractionActor;
     private StartWelcomeActor  mStartWelcomeActor;
@@ -96,7 +95,9 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 					}
 				}else if(GameResource.NEXTLINE==arg0.what){
 					DiceActor actor=(DiceActor) arg0.obj;
-				    mFristDiceActors.remove(actor);
+                    if(actor!=null){
+                    	 mFristDiceActors.remove(actor);
+					}
 					boolean pand=false;
 					boolean isStriving=false;
 					for(int i=0;i<GameResource.mDiceActors[0].length;i++){
@@ -108,36 +109,39 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 							isStriving=true;
 						}
 					}
-					if(isStriving){
-						if(mGirlActor.getmGirlState()!=GirlState.Striving){
-							mGirlActor.setmGirlState(GirlState.Striving);
-						}
-					}
-					if(mFristDiceActors.isEmpty()){
-						if(!pand){
-							int j=0;
-							for(j=0;j<InitColumnCount;j++){
-								int figure=MathUtils.random(1, getLevelCountToRange());
-								DiceActor diceActor=new DiceActor(figure, j);
-								Message message=GameResource.mMainHandler.obtainMessage();
-								message.what=STARTGAME;
-								message.obj=diceActor;
-								message.sendToTarget();
-								SystemClock.sleep(STARTPAUSETIME);
-							}
-							if(j>=InitColumnCount){
-								for(j=0;j<InitColumnCount;j++){
-									Message message=GameResource.mMainHandler.obtainMessage();
-									message.what=RUNDICEACTOR;
-									message.arg1=j;
-									message.sendToTarget();
-								}
+					if(pand){
+						GameResource.mMainHandler.sendEmptyMessage(GameOver);
+					}else{
+						if(isStriving){
+							if(mGirlActor.getmGirlState()!=GirlState.Striving){
+								mGirlActor.setmGirlState(GirlState.Striving);
 							}
 						}else{
-							GameResource.mMainHandler.sendEmptyMessage(GameOver);
+							if(mGirlActor.getmGirlState()!=GirlState.Thinking){
+								mGirlActor.setmGirlState(GirlState.Thinking);
+							}
 						}
-						
-					}
+						if(mFristDiceActors.isEmpty()){
+								int j=0;
+								for(j=0;j<InitColumnCount;j++){
+									int figure=MathUtils.random(1, getLevelCountToRange());
+									DiceActor diceActor=new DiceActor(figure, j);
+									Message message=GameResource.mMainHandler.obtainMessage();
+									message.what=STARTGAME;
+									message.obj=diceActor;
+									message.sendToTarget();
+									SystemClock.sleep(STARTPAUSETIME);
+								}
+								if(j>=InitColumnCount){
+									for(j=0;j<InitColumnCount;j++){
+										Message message=GameResource.mMainHandler.obtainMessage();
+										message.what=RUNDICEACTOR;
+										message.arg1=j;
+										message.sendToTarget();
+									}
+								}
+							}
+						}
 				}
 				return false;
 			}
@@ -170,7 +174,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					System.out.println("游戏结束");
     				}else if(YouWin==arg0.what){
     					mGirlActor.setmGirlState(GirlState.Win);
-    					System.out.println("你影了");
+    					System.out.println("你赢了");
     				}
     				
     				return false;
@@ -199,21 +203,24 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 			
 			@Override
 			public void run() {
+				List<DiceActor>  diceActors=new ArrayList<DiceActor>();
 			for(int i=0;i<InitLineCount;i++){
 				for(int j=0;j<InitColumnCount;j++){
 					int figure=MathUtils.random(1, getLevelCountToRange());
 					DiceActor diceActor=new DiceActor(figure, j);
-					Message message=GameResource.mMainHandler.obtainMessage();
-					message.what=STARTGAME;
-					message.obj=diceActor;
-					message.sendToTarget();
-					SystemClock.sleep(STARTPAUSETIME);
+					 mBackgroudStage.addActor(diceActor); 
+					 diceActors.add(diceActor);
+					 SystemClock.sleep(200);
 				}
-				GameResource.mHandler.sendEmptyMessage(RUNDICEACTOR);
-				SystemClock.sleep(STARTLINETIME*InitLineCount);
+				for(int z=0;z<InitColumnCount;z++){
+					diceActors.get(z).runAction(true);
+					SystemClock.sleep(100);
+				}
+				diceActors.clear();
 			 }
+			GameResource.mHandler.sendEmptyMessage(GameResource.NEXTLINE);
 			GameResource.mMainHandler.sendEmptyMessage(ShowNumber);
-			isClick=true;
+			GameResource.isClick=true;
 			}
 		});
     	thread.start();
@@ -337,7 +344,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	}
 	
 	private void resetScreen(){
-		isClick=false;
+		GameResource.isClick=false;
 		GameResource.mCalculationCount=0;
 		mFristDiceActors.clear();
 		mSelectDiceActors.clear();

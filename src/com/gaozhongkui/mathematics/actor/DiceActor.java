@@ -50,7 +50,7 @@ public class DiceActor extends BaseActor {
 	    	   @Override
 	    	public boolean touchDown(InputEvent event, float x, float y,
 	    			int pointer, int button) {
-	    		   if(MainScreen.isClick){
+	    		   if(GameResource.isClick){
 	    			   if(!isDown){
 	    				   isDown=true;
 	    				   mCacheTexture=GameResource.mBorderDigital;
@@ -135,7 +135,7 @@ public class DiceActor extends BaseActor {
 				setY(mStartPoint.y-mIntervalDistance);
 				mStartPoint.y=getY();
 				isStartRun=true;
-				if(isFristRun){
+				if(isFristRun&&GameResource.isClick){
 					isFristRun=false;
 					Message message=GameResource.mHandler.obtainMessage();
 					message.what=GameResource.NEXTLINE;
