@@ -3,11 +3,15 @@ package com.gaozhongkui.mathematics.screen;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.youmi.android.spot.SpotDialogListener;
+import net.youmi.android.spot.SpotManager;
+
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -37,6 +41,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private static final int YouWin=1068;
 	private static final int RUNDICEACTOR=1030;
 	private static final int GirlStateJudge=1006;
+	private static final int ShowAdvertisement=1086;
 	private static int STARTPAUSETIME=600;
 	private static int STARTLINETIME=520;
 	private Image mDrawingBoard;
@@ -69,6 +74,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		initHandler();
 		nextLevel();
 		resetScreen();
+		GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
 	}
     @SuppressLint("UseValueOf")
 	private void initHandler(){
@@ -188,6 +194,24 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 								mGirlActor.setmGirlState(GirlState.Thinking);
 							}
 						}
+    				}else if(ShowAdvertisement==arg0.what){
+    					SpotManager.getInstance(GameUtils.getInstance().getContext()).showSpotAds(GameUtils.getInstance().getContext(), new SpotDialogListener() {
+    						@Override
+    						public void onShowSuccess() {
+    							Log.i("YoumiAdDemo", "展示成功");
+    						}
+
+    						@Override
+    						public void onShowFailed() {
+    							Log.i("YoumiAdDemo", "展示失败");
+    						}
+
+    						@Override
+    						public void onSpotClosed() {
+    							Log.i("YoumiAdDemo", "展示关闭");
+    						}
+
+    					});
     				}
     			}
     				return false;

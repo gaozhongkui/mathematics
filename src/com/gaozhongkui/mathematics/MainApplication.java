@@ -32,24 +32,6 @@ public class MainApplication extends AndroidApplication {
 		SpotManager.getInstance(this).setAnimationType(SpotManager.ANIM_ADVANCE);
 		// 设置插屏动画的横竖屏展示方式，如果设置了横屏，则在有广告资源的情况下会是优先使用横屏图。
 		SpotManager.getInstance(this).setSpotOrientation(SpotManager.ORIENTATION_LANDSCAPE);
-		// 展示插播广告，可以不调用loadSpot独立使用
-		SpotManager.getInstance(this).showSpotAds(this, new SpotDialogListener() {
-					@Override
-					public void onShowSuccess() {
-						Log.i("YoumiAdDemo", "展示成功");
-					}
-
-					@Override
-					public void onShowFailed() {
-						Log.i("YoumiAdDemo", "展示失败");
-					}
-
-					@Override
-					public void onSpotClosed() {
-						Log.i("YoumiAdDemo", "展示关闭");
-					}
-
-				}); 
 
 	}
 
@@ -62,9 +44,7 @@ public class MainApplication extends AndroidApplication {
 	
 	@Override
 	public void onBackPressed() {
-		/*if (!SpotManager.getInstance(this).disMiss()) {
-			super.onBackPressed();
-		}*/
+		
 	}
 	@Override
 	protected void onStop() {
