@@ -119,6 +119,9 @@ public class LittleGirlActor extends BaseActor {
 		
 		isShowNumber=true;
 	}
+	public void hideNumber(){
+		isShowNumber=false;
+	}
 	
 	public GirlState getmGirlState() {
 		return mGirlState;

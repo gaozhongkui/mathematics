@@ -5,12 +5,17 @@ import android.os.Handler;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.gaozhongkui.mathematics.screen.MainScreen;
 import com.gaozhongkui.mathematics.screen.MainScreen.GameState;
 
 public class GameResource {
 	public static final int NEXTLINE=1032;
 	public static final int  AnswerWrong=1016;
 	public static final int  SelectDice=1018;
+	public static final int AgainMake=1266;
+	public static final int WinMake=1206;
+	public static final int ContinueMake=1208;
+	public static final int STARTGAME=1026;
 	public static int        mLevelCount=0; /**关卡 **/
 	public static int        mFractionCount=0; /**积分 **/
 	public static int        mLevelTask=0; /**任务 **/
@@ -32,5 +37,7 @@ public class GameResource {
     public static  Sound      mFailedMusic;     //失败
     public static  Sound      mPreparationMusic; //准备
     public static  Sound      mWinGroudMusic;   //赢
+    public static  boolean    initMainScreen;
+    public static MainScreen  mMainScreen;
 
 }

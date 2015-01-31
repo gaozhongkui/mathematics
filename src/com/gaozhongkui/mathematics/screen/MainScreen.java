@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.youmi.android.spot.SpotDialogListener;
 import net.youmi.android.spot.SpotManager;
-
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -14,19 +13,19 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gaozhongkui.mathematics.GameResource;
 import com.gaozhongkui.mathematics.actor.DiceActor;
+import com.gaozhongkui.mathematics.actor.FailedPrompterActor;
 import com.gaozhongkui.mathematics.actor.FractionActor;
 import com.gaozhongkui.mathematics.actor.LittleGirlActor;
 import com.gaozhongkui.mathematics.actor.LittleGirlActor.GirlState;
 import com.gaozhongkui.mathematics.actor.StartPrompterActor;
 import com.gaozhongkui.mathematics.actor.StartWelcomeActor;
 import com.gaozhongkui.mathematics.actor.StartWelcomeActor.StartWelcomeListener;
+import com.gaozhongkui.mathematics.actor.WinPrompterActor;
 import com.gaozhongkui.mathematics.utils.GameUtils;
-import com.gaozhongkui.mathematics.widget.BaseButton;
 import com.gaozhongkui.mathematics.widget.BaseImage;
 import com.gaozhongkui.mathematics.widget.BaseScreen;
 
@@ -35,9 +34,8 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private static  volatile List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
 	private static final int InitColumnCount=10;
 	private static final int InitLineCount=4;
-	private static final int STARTGAME=1026;
 	private static final int GameOver=1022;
-	private static final int ShowNumber=1022;
+	private static final int ShowNumber=1028;
 	private static final int YouWin=1068;
 	private static final int RUNDICEACTOR=1030;
 	private static final int GirlStateJudge=1006;
@@ -50,52 +48,55 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     private StartWelcomeActor  mStartWelcomeActor;
     private LittleGirlActor   mGirlActor;
     private StartPrompterActor     mPrompterActor;
-    private BaseButton mStartBut;
+    private WinPrompterActor       mWinPrompterActor;
+    private FailedPrompterActor    mFailedPrompterActor;
+    private boolean isSendOver;
+    private Stage  mDiceStage;
     private HandlerThread mHandlerThread=new HandlerThread("gaozhongkui");
 	@Override
 	protected void init() {
-		mBackgroud = new BaseImage("data/images/backgroud.png");
-		mBackgroudStage.addActor(mBackgroud);
-		mDrawingBoard=new BaseImage("data/images/drawingboard.png");
-		mDrawingBoard.setPosition(326, 0);
-		mBackgroudStage.addActor(mDrawingBoard);
-		mFractionActor=new FractionActor();
-		mBackgroudStage.addActor(mFractionActor);
-		mStartWelcomeActor=new StartWelcomeActor();
-		mForegroundStage.addActor(mStartWelcomeActor);
-		mGirlActor=new LittleGirlActor();
-		mBackgroudStage.addActor(mGirlActor);
-		mStartWelcomeActor.setmStartWelcomeListener(this);
-		mPrompterActor=new StartPrompterActor();
-		mForegroundStage.addActor(mPrompterActor);
-		mStartBut=new BaseButton( "data/images/startbutdown.png","data/images/startbutdown.png");
-		mStartBut.setPosition(436, 148);
-		mForegroundStage.addActor(mStartBut);
-		initLittening();
-		initHandler();
-		nextLevel();
-		resetScreen();
-	//	GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
-		GameResource.mBackGroudMusic.setLooping(true);
-		GameResource.mBackGroudMusic.play();
-		GameResource.mMainHandler.sendEmptyMessageDelayed(PreparationMusic, 10);
+		if(!GameResource.initMainScreen){
+			mDiceStage=new Stage(mViewport);
+			mBackgroud = new BaseImage("data/images/backgroud.png");
+			mBackgroudStage.addActor(mBackgroud);
+			mDrawingBoard=new BaseImage("data/images/drawingboard.png");
+			mDrawingBoard.setPosition(326, 0);
+			mBackgroudStage.addActor(mDrawingBoard);
+			mFractionActor=new FractionActor();
+			mBackgroudStage.addActor(mFractionActor);
+			mStartWelcomeActor=new StartWelcomeActor();
+			mForegroundStage.addActor(mStartWelcomeActor);
+			mGirlActor=new LittleGirlActor();
+			mBackgroudStage.addActor(mGirlActor);
+			mStartWelcomeActor.setmStartWelcomeListener(this);
+			mPrompterActor=new StartPrompterActor(mForegroundStage);
+			mWinPrompterActor=new WinPrompterActor(mForegroundStage);
+			mFailedPrompterActor=new FailedPrompterActor(mForegroundStage);
+			mInputMultiplexer.addProcessor(mDiceStage);
+			GameResource.mBackGroudMusic.setLooping(true);
+			initHandler();
+			nextLevel();
+			resetScreen();
+			GameResource.initMainScreen=true;
+		}
+		initGame();
+	// 	GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
+		
+	}
+	private void initGame(){
+		GameResource.mLevelCount=0;
+		GameResource.mFractionCount=0;
 	}
     @SuppressLint("UseValueOf")
 	private void initHandler(){
     	GameResource.mDiceActors=new Boolean[10][10];
-    	for(int i=0;i<GameResource.mDiceActors.length;i++){
-    		for(int j=0;j<GameResource.mDiceActors[i].length;j++){
-    			GameResource.mDiceActors[i][j]=new Boolean(false);
-    		}
-    	}
-    	
     	mHandlerThread.start();
     	GameResource.mHandler=new Handler(mHandlerThread.getLooper(), new Handler.Callback() {
 			@Override
 			public boolean handleMessage(Message arg0) {
 			if(GameResource.mGameState==GameState.None){
-				if(STARTGAME==arg0.what){
-					HidePromterActor();
+				if(GameResource.STARTGAME==arg0.what){
+					hideWelcome();
 					initScreenLine();
 				}else if(RUNDICEACTOR==arg0.what){
 					for(int i=0;i<InitColumnCount;i++){
@@ -106,20 +107,23 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 						SystemClock.sleep(STARTLINETIME);
 					}
 				}else if(GameResource.NEXTLINE==arg0.what){
-					
+					   GameResource.mMainHandler.sendEmptyMessage(GirlStateJudge);
 						DiceActor actor=(DiceActor) arg0.obj;
 	                    if(actor!=null){
 	                    	 mFristDiceActors.remove(actor);
 						}
 						boolean pand=false;
 						for(int i=0;i<GameResource.mDiceActors[0].length;i++){
-							if(GameResource.mDiceActors[i][0]){
+							if(GameResource.mDiceActors[i][5]){//0
 								pand=true;
 								break;
 							}
 						}
 						if(pand){
-							GameResource.mMainHandler.sendEmptyMessage(GameOver);
+							if(!isSendOver){
+								isSendOver=true;
+								GameResource.mMainHandler.sendEmptyMessage(GameOver);
+							}
 						}else{
 							if(mFristDiceActors.isEmpty()){
 									int j=0;
@@ -127,7 +131,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 										int figure=MathUtils.random(1, getLevelCountToRange());
 										DiceActor diceActor=new DiceActor(figure, j);
 										Message message=GameResource.mMainHandler.obtainMessage();
-										message.what=STARTGAME;
+										message.what=GameResource.STARTGAME;
 										message.obj=diceActor;
 										message.sendToTarget();
 										SystemClock.sleep(STARTPAUSETIME);
@@ -154,9 +158,9 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     			@Override
     			public boolean handleMessage(Message arg0) {
     			if(GameResource.mGameState==GameState.None){
-    				if(STARTGAME==arg0.what){              //添加
+    				if(GameResource.STARTGAME==arg0.what){              //添加
     					 DiceActor diceActor=(DiceActor) arg0.obj;
-    					 mBackgroudStage.addActor(diceActor); 
+    					 mDiceStage.addActor(diceActor); 
     					 mFristDiceActors.add(diceActor);
     				}else if(RUNDICEACTOR==arg0.what){   //单个运行
     					DiceActor diceActor=mFristDiceActors.get(arg0.arg1);
@@ -175,15 +179,10 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					DiceActor actor=(DiceActor) arg0.obj;
     					mSelectDiceActors.add(actor);
     				}else if(GameOver==arg0.what){
-    					mGirlActor.setmGirlState(GirlState.Failed);
-    					GameResource.isClick=false;
-    					GameResource.mGameState=GameState.Failed;
-    					GameResource.mFailedMusic.play();
+    					isSendOver=false;
+    					showFailed();
     				}else if(YouWin==arg0.what){
-    					mGirlActor.setmGirlState(GirlState.Win);
-    					GameResource.isClick=false;
-    					GameResource.mGameState=GameState.Win;
-    					GameResource.mWinGroudMusic.play();
+    					showWin();
     				}else if(GirlStateJudge==arg0.what){
     					boolean isStriving=false;
     					for(int i=0;i<GameResource.mDiceActors[0].length;i++){
@@ -221,12 +220,27 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     				}else if(PreparationMusic==arg0.what){
     					GameResource.mPreparationMusic.play();
     				}
-    			}
+    			}else if(GameResource.WinMake==arg0.what){
+					initNextLevel();
+				}else if(GameResource.ContinueMake==arg0.what){
+					initContinueLevel();
+				}else if(GameResource.AgainMake==arg0.what){
+					startGuideScreen();
+				}
     				return false;
     			}
     		});
     }
-    
+    private void initContinueLevel(){
+    	resetScreen();
+    }
+    private  void initNextLevel(){
+    	nextLevel();
+    	resetScreen();
+    }
+    private void startGuideScreen(){
+    	startScreen(new GuideScreen());
+    }
     /** 对的 **/
     public static void SelectAnswerRight(){
     	for(DiceActor actor:mSelectDiceActors){
@@ -237,7 +251,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		mSelectDiceActors.clear();
 		GameResource.mSelectCalculationCount=0;
 		
-		if(getCurrenTase()==GameResource.mSelectAnswerTask){
+		if(GameResource.mLevelTask==GameResource.mSelectAnswerTask){
 			GameResource.mMainHandler.sendEmptyMessage(YouWin);
 		}else{
 			GameResource.mMainHandler.sendEmptyMessage(ShowNumber);
@@ -255,7 +269,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 				for(int j=0;j<InitColumnCount;j++){
 					int figure=MathUtils.random(1, getLevelCountToRange());
 					DiceActor diceActor=new DiceActor(figure, j);
-					 mBackgroudStage.addActor(diceActor); 
+					mDiceStage.addActor(diceActor); 
 					 diceActors.add(diceActor);
 					 SystemClock.sleep(200);
 				}
@@ -307,6 +321,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	}
 	
 	private void nextLevel(){
+		GameResource.mBackGroudMusic.play();
 		GameResource.mLevelCount++;
 		if(GameResource.mLevelCount==1){
 			GameResource.mLevelTask=30;
@@ -326,38 +341,10 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 			GameResource.mLevelTask=100;
 		}
 	}
-	private static int getCurrenTase(){
-		if(GameResource.mLevelCount==1){
-			GameResource.mLevelTask=30;
-		}else if(GameResource.mLevelCount==2){
-			GameResource.mLevelTask=40;
-		}else if(GameResource.mLevelCount==3){
-			GameResource.mLevelTask=50;
-		}else if(GameResource.mLevelCount==4){
-			GameResource.mLevelTask=60;
-		}else if(GameResource.mLevelCount==5){
-			GameResource.mLevelTask=70;
-		}else if(GameResource.mLevelCount==6){
-			GameResource.mLevelTask=80;
-		}else if(GameResource.mLevelCount==7){
-			GameResource.mLevelTask=90;
-		}else if(GameResource.mLevelCount==8){
-			GameResource.mLevelTask=100;
-		}
-		return GameResource.mLevelTask;
-	}
-	private void initLittening(){
-		mStartBut.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				super.clicked(event, x, y);
-				GameResource.mHandler.obtainMessage(STARTGAME).sendToTarget();
-			}
-		});
-	}
 	@Override
 	protected void draw(float delta) {
-
+		mDiceStage.act();
+		mDiceStage.draw();
 	}
 
 	@Override
@@ -378,27 +365,68 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 
 	@Override
 	public void StartWelcomeFinish() {
-		showPromterActor();
-	}
-	private void HidePromterActor(){
-		mStartBut.setVisible(false);
-		mPrompterActor.setVisible(false);
-		
-	}
-	private void showPromterActor(){
-		mStartBut.setVisible(true);
-		mPrompterActor.setVisible(true);
-		
+		showWelcome();
 	}
 	
+	private void showWelcome(){
+		mPrompterActor.setVisible(true);
+		hideWin();
+		hideFailed();
+	}
+	private void showWin(){
+		mGirlActor.setmGirlState(GirlState.Win);
+		GameResource.isClick=false;
+		GameResource.mGameState=GameState.Win;
+		GameResource.mWinGroudMusic.play();
+		GameResource.mBackGroudMusic.stop();
+		mWinPrompterActor.setVisible(true);
+		hideWelcome();
+		hideFailed();
+	}
+	private void showFailed(){
+		mGirlActor.setmGirlState(GirlState.Failed);
+		GameResource.isClick=false;
+		GameResource.mGameState=GameState.Failed;
+		GameResource.mFailedMusic.play();
+		GameResource.mBackGroudMusic.stop();
+		mFailedPrompterActor.setVisible(true);	
+		hideWelcome();
+		hideWin();
+	}
+	private void hideWelcome(){
+		mPrompterActor.setVisible(false);
+	}
+	private void hideWin(){
+		mWinPrompterActor.setVisible(false);
+	}
+	private void hideFailed(){
+		mFailedPrompterActor.setVisible(false);	
+	}
 	private void resetScreen(){
+		mGirlActor.setmGirlState(GirlState.Thinking);
+		mGirlActor.hideNumber();
 		GameResource.mGameState=GameState.None;
 		GameResource.isClick=false;
 		GameResource.mCalculationCount=0;
 		mFristDiceActors.clear();
 		mSelectDiceActors.clear();
+		mDiceStage.clear();
 		mStartWelcomeActor.startAction();
-		HidePromterActor();
+		GameResource.mMainHandler.sendEmptyMessageDelayed(PreparationMusic, 10);
+		GameResource.mMainHandler.removeMessages(GameResource.STARTGAME);
+		GameResource.mHandler.removeMessages(GameResource.STARTGAME);
+		GameResource.mMainHandler.removeMessages(RUNDICEACTOR);
+		hideFailed();
+		hideWin();
+		hideWelcome();
+		resertArray();
+	}
+	private void resertArray(){
+		for(int i=0;i<GameResource.mDiceActors.length;i++){
+    		for(int j=0;j<GameResource.mDiceActors[i].length;j++){
+    			GameResource.mDiceActors[i][j]=false;
+    		}
+    	}
 	}
 	
 	public enum GameState{

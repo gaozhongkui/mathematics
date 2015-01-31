@@ -33,7 +33,10 @@ public class GuideScreen extends BaseScreen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				super.clicked(event, x, y);
-				startScreen(new MainScreen());
+				if(GameResource.mMainScreen==null){
+					GameResource.mMainScreen=new MainScreen();
+				}
+				startScreen(GameResource.mMainScreen);
 			}
 		});
 		mIntroduceButton.addListener(new ClickListener(){
