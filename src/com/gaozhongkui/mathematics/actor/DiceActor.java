@@ -60,7 +60,6 @@ public class DiceActor extends BaseActor {
 	    				   }else if(GameResource.mAlgorithState==AlgorithState.Multiply){
 	    					   GameResource.mSelectCalculationCount*=  mFigure;
 	    				   }
-	    				   
 	    				   GameResource.mMainHandler.obtainMessage(GameResource.SelectDice, DiceActor.this).sendToTarget();
 	    			   }
 	    		   }

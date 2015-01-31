@@ -463,6 +463,11 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 		if(!mSelectDiceActors.isEmpty()){
 			answerWrong();
 		}
+		if(GameResource.mAlgorithState==AlgorithState.Add){
+			 GameResource.mSelectCalculationCount=0;
+		  }else if(GameResource.mAlgorithState==AlgorithState.Multiply){
+			 GameResource.mSelectCalculationCount=1;
+		  }	 
 	}
 	
 }
