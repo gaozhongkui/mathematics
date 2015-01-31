@@ -5,7 +5,7 @@ import android.os.Handler;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.gaozhongkui.mathematics.screen.GuideScreen;
+import com.gaozhongkui.mathematics.actor.AlgorithmActor.AlgorithState;
 import com.gaozhongkui.mathematics.screen.MainScreen;
 import com.gaozhongkui.mathematics.screen.MainScreen.GameState;
 
@@ -41,6 +41,6 @@ public class GameResource {
     public static  Sound      mWinGroudMusic;   //Ӯ
     public static  boolean    initMainScreen;
     public static MainScreen  mMainScreen;
-    public static GuideScreen mGuideScreen;
+    public static AlgorithState mAlgorithState;
 
 }

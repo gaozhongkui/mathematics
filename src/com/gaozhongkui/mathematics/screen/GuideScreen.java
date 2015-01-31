@@ -15,19 +15,17 @@ public class GuideScreen extends BaseScreen {
 	private final int mBackGauge=15;
 	@Override
 	protected void init() {
-		mBackgroud = new BaseImage("data/images/welcomebackgroud.png");
-		mBackgroudStage.addActor(mBackgroud);
-		mStartButton=new BaseButton("data/images/startbutton.png", "data/images/startbuttondown.png");
-		mIntroduceButton=new BaseButton("data/images/explainbutton.png", "data/images/explainbuttondown.png");
-		mStartButton.setPosition(mBackGauge, 102);
-		mIntroduceButton.setPosition(mBackGauge, 22);
-		mBackgroudStage.addActor(mStartButton);
-		mBackgroudStage.addActor(mIntroduceButton);
-		initListener();
-		initValue();
+			mBackgroud = new BaseImage("data/images/welcomebackgroud.png");
+			mBackgroudStage.addActor(mBackgroud);
+			mStartButton=new BaseButton("data/images/startbutton.png", "data/images/startbuttondown.png");
+			mIntroduceButton=new BaseButton("data/images/explainbutton.png", "data/images/explainbuttondown.png");
+			mStartButton.setPosition(mBackGauge, 102);
+			mIntroduceButton.setPosition(mBackGauge, 22);
+			mBackgroudStage.addActor(mStartButton);
+			mBackgroudStage.addActor(mIntroduceButton);
+			initListener();
+			initValue();	
 	}
-	
-	
 	private void initListener(){
 		mStartButton.addListener(new ClickListener(){
 			@Override
@@ -92,7 +90,7 @@ public class GuideScreen extends BaseScreen {
 
 	@Override
 	public void hide() {
-/*       if(mBackgroud!=null){
+       if(mBackgroud!=null){
     	   mBackgroud.clear();
     	   mBackgroud.remove();
     	   mBackgroud=null;
@@ -107,7 +105,7 @@ public class GuideScreen extends BaseScreen {
     	   mIntroduceButton.remove();
     	   mIntroduceButton=null;
        }
-       clearScreen();*/
+       clearScreen();
 	}
 	
 

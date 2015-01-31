@@ -49,7 +49,6 @@ public class MainApplication extends AndroidApplication {
 
 	private void exitApp(){
 		GameResource.mMainScreen=null;
-		GameResource.mGuideScreen=null;
 		finish();
 	}
 	@Override

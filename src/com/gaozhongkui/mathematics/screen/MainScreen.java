@@ -16,6 +16,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.gaozhongkui.mathematics.GameResource;
+import com.gaozhongkui.mathematics.actor.AlgorithmActor;
+import com.gaozhongkui.mathematics.actor.AlgorithmActor.AlgorithState;
+import com.gaozhongkui.mathematics.actor.AlgorithmActor.SwitchAlgorithListenter;
 import com.gaozhongkui.mathematics.actor.DiceActor;
 import com.gaozhongkui.mathematics.actor.FailedPrompterActor;
 import com.gaozhongkui.mathematics.actor.FractionActor;
@@ -29,7 +32,7 @@ import com.gaozhongkui.mathematics.utils.GameUtils;
 import com.gaozhongkui.mathematics.widget.BaseImage;
 import com.gaozhongkui.mathematics.widget.BaseScreen;
 
-public class MainScreen extends BaseScreen  implements StartWelcomeListener {
+public class MainScreen extends BaseScreen  implements StartWelcomeListener ,SwitchAlgorithListenter{
 	private static List<DiceActor>  mSelectDiceActors=new ArrayList<DiceActor>();
 	private static  volatile List<DiceActor> mFristDiceActors=new ArrayList<DiceActor>();
 	private static final int InitColumnCount=10;
@@ -50,6 +53,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     private StartPrompterActor     mPrompterActor;
     private WinPrompterActor       mWinPrompterActor;
     private FailedPrompterActor    mFailedPrompterActor;
+    private AlgorithmActor         mAlgorithmActor;
     private boolean isSendOver;
     private Stage  mDiceStage;
     private HandlerThread mHandlerThread=new HandlerThread("gaozhongkui");
@@ -73,6 +77,8 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 			mWinPrompterActor=new WinPrompterActor(mForegroundStage);
 			mFailedPrompterActor=new FailedPrompterActor(mForegroundStage);
 			mInputMultiplexer.addProcessor(mDiceStage);
+			mAlgorithmActor=new AlgorithmActor(mBackgroudStage);
+			mAlgorithmActor.setmAlgorithListenter(this);
 			GameResource.mBackGroudMusic.setLooping(true);
 			initHandler();
 			GameResource.initMainScreen=true;
@@ -87,6 +93,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		GameResource.mLevelCount=0;
 		GameResource.mFractionCount=0;
 		GameResource.mGameState=GameState.None;
+		GameResource.mAlgorithState=AlgorithState.Add;
 	}
     @SuppressLint("UseValueOf")
 	private void initHandler(){
@@ -174,11 +181,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     					GameResource.mCalculationCount=getSetNumber();
     					mGirlActor.showNumber(GameResource.mCalculationCount);
     				}else if(GameResource.AnswerWrong==arg0.what){  /**  ´í **/
-    					for(DiceActor actor:mSelectDiceActors){
-    						actor.reset();
-    					}
-    					mSelectDiceActors.clear();
-    					GameResource.mSelectCalculationCount=0;
+    					answerWrong();
     					GameResource.mEliminateFailedMusic.play();
     				}else if(GameResource.SelectDice==arg0.what){  /** Ñ¡Ôñ **/
     					DiceActor actor=(DiceActor) arg0.obj;
@@ -244,7 +247,14 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     	resetScreen();
     }
     private void startGuideScreen(){
-    	startScreen(GameResource.mGuideScreen);
+    	//startScreen(GameResource.mGuideScreen);
+    }
+    private void answerWrong(){
+    	for(DiceActor actor:mSelectDiceActors){
+			actor.reset();
+		}
+		mSelectDiceActors.clear();
+		GameResource.mSelectCalculationCount=0;
     }
     /** ¶ÔµÄ **/
     public static void SelectAnswerRight(){
@@ -446,6 +456,13 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	
 	public enum GameState{
 		None,Win,Failed
+	}
+
+	@Override
+	public void swtichResult() {
+		if(!mSelectDiceActors.isEmpty()){
+			answerWrong();
+		}
 	}
 	
 }

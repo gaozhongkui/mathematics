@@ -9,8 +9,7 @@ public class MainGame extends Game {
 	@Override
 	public void create() {
 		GameUtils.getInstance().setmGame(this);
-		GameResource.mGuideScreen=new GuideScreen();
-		setScreen(GameResource.mGuideScreen);
+		setScreen(new GuideScreen());
 	}
 
 }
