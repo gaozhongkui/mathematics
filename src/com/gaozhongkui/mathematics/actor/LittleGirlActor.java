@@ -108,7 +108,7 @@ public class LittleGirlActor extends BaseActor {
 		}else if(number>9){
 			mShowNumber[0]=mNumbers[0];
 			int a=(number/10);
-			int b=(a*10)-number;
+			int b=number-(a*10);
 			mShowNumber[1]=getNumberByTexture(a);
 			mShowNumber[2]=getNumberByTexture(b);
 		}else{

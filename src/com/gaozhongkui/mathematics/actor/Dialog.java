@@ -63,7 +63,7 @@ public class Dialog extends BasePrompterActor {
 	protected void drawChild(Batch batch, float parentAlpha) {
 		batch.draw(mTexture, getX(), getY());
 		TextBounds textBounds=mBitmapFont.getBounds(GameResource.mFractionCount+"");
-		mBitmapFont.draw(batch, GameResource.mFractionCount+"", getX()+(getWidth()/2-textBounds.width/2), getY()+180);
+		mBitmapFont.draw(batch, GameResource.mFractionCount+"", getX()+(getWidth()/2-textBounds.width/2), getY()+170);
 	}
 
 	@Override

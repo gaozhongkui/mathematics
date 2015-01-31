@@ -75,11 +75,11 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 			mInputMultiplexer.addProcessor(mDiceStage);
 			GameResource.mBackGroudMusic.setLooping(true);
 			initHandler();
-			nextLevel();
-			resetScreen();
 			GameResource.initMainScreen=true;
 		}
 		initGame();
+		nextLevel();
+		resetScreen();
 	// 	GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
 		
 	}
@@ -114,7 +114,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 						}
 						boolean pand=false;
 						for(int i=0;i<GameResource.mDiceActors[0].length;i++){
-							if(GameResource.mDiceActors[i][5]){//0
+							if(GameResource.mDiceActors[i][0]){
 								pand=true;
 								break;
 							}
@@ -321,12 +321,13 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	}
 	
 	private void nextLevel(){
-		GameResource.mBackGroudMusic.play();
 		GameResource.mLevelCount++;
 		if(GameResource.mLevelCount==1){
-			GameResource.mLevelTask=30;
+			GameResource.mLevelTask=1;
+			//GameResource.mLevelTask=30;
 		}else if(GameResource.mLevelCount==2){
-			GameResource.mLevelTask=40;
+			GameResource.mLevelTask=2;
+//			GameResource.mLevelTask=40;
 		}else if(GameResource.mLevelCount==3){
 			GameResource.mLevelTask=50;
 		}else if(GameResource.mLevelCount==4){
@@ -403,6 +404,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		mFailedPrompterActor.setVisible(false);	
 	}
 	private void resetScreen(){
+		GameResource.mBackGroudMusic.play();
 		mGirlActor.setmGirlState(GirlState.Thinking);
 		mGirlActor.hideNumber();
 		GameResource.mGameState=GameState.None;
