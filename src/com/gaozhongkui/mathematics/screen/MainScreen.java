@@ -323,11 +323,9 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private void nextLevel(){
 		GameResource.mLevelCount++;
 		if(GameResource.mLevelCount==1){
-			GameResource.mLevelTask=1;
-			//GameResource.mLevelTask=30;
+			GameResource.mLevelTask=30;
 		}else if(GameResource.mLevelCount==2){
-			GameResource.mLevelTask=2;
-//			GameResource.mLevelTask=40;
+			GameResource.mLevelTask=40;
 		}else if(GameResource.mLevelCount==3){
 			GameResource.mLevelTask=50;
 		}else if(GameResource.mLevelCount==4){
@@ -383,6 +381,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		mWinPrompterActor.setVisible(true);
 		hideWelcome();
 		hideFailed();
+		clearHandler();
 	}
 	private void showFailed(){
 		mGirlActor.setmGirlState(GirlState.Failed);
@@ -393,6 +392,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		mFailedPrompterActor.setVisible(true);	
 		hideWelcome();
 		hideWin();
+		clearHandler();
 	}
 	private void hideWelcome(){
 		mPrompterActor.setVisible(false);
@@ -403,7 +403,18 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private void hideFailed(){
 		mFailedPrompterActor.setVisible(false);	
 	}
+	
+	private void clearHandler(){
+		GameResource.mMainHandler.sendEmptyMessageDelayed(PreparationMusic, 10);
+		GameResource.mMainHandler.removeMessages(GameResource.STARTGAME);
+		GameResource.mHandler.removeMessages(GameResource.STARTGAME);
+		GameResource.mMainHandler.removeMessages(RUNDICEACTOR);
+		GameResource.mMainHandler.removeMessages(GirlStateJudge);
+		GameResource.mHandler.removeMessages(RUNDICEACTOR);
+		GameResource.mHandler.removeMessages(GameResource.NEXTLINE);	
+	}
 	private void resetScreen(){
+		clearHandler();
 		GameResource.mBackGroudMusic.play();
 		mGirlActor.setmGirlState(GirlState.Thinking);
 		mGirlActor.hideNumber();
@@ -414,10 +425,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		mSelectDiceActors.clear();
 		mDiceStage.clear();
 		mStartWelcomeActor.startAction();
-		GameResource.mMainHandler.sendEmptyMessageDelayed(PreparationMusic, 10);
-		GameResource.mMainHandler.removeMessages(GameResource.STARTGAME);
-		GameResource.mHandler.removeMessages(GameResource.STARTGAME);
-		GameResource.mMainHandler.removeMessages(RUNDICEACTOR);
 		hideFailed();
 		hideWin();
 		hideWelcome();
