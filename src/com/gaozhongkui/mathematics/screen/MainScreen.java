@@ -240,6 +240,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
     		});
     }
     private void initContinueLevel(){
+    	GameResource.mFractionCount-=GameResource.mCreenLevelFractionCount;
     	resetScreen();
     }
     private  void initNextLevel(){
@@ -407,7 +408,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 		clearHandler();
 	}
 	private void showFailed(){
-		GameResource.mFractionCount-=GameResource.mCreenLevelFractionCount;
 		mGirlActor.setmGirlState(GirlState.Failed);
 		GameResource.isClick=false;
 		GameResource.mGameState=GameState.Failed;
