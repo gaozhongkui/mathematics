@@ -254,7 +254,11 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 			actor.reset();
 		}
 		mSelectDiceActors.clear();
-		GameResource.mSelectCalculationCount=0;
+		if(GameResource.mAlgorithState==AlgorithState.Add){
+			 GameResource.mSelectCalculationCount=0;
+		  }else if(GameResource.mAlgorithState==AlgorithState.Multiply){
+			 GameResource.mSelectCalculationCount=1;
+		 }
     }
     /** ¶ÔµÄ **/
     public static void SelectAnswerRight(){
@@ -265,8 +269,11 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
     	GameResource.mFractionCount+=mSelectDiceActors.size()*10;
     	GameResource.mCreenLevelFractionCount+=mSelectDiceActors.size()*10;
 		mSelectDiceActors.clear();
-		GameResource.mSelectCalculationCount=0;
-		
+		if(GameResource.mAlgorithState==AlgorithState.Add){
+			 GameResource.mSelectCalculationCount=0;
+		 }else if(GameResource.mAlgorithState==AlgorithState.Multiply){
+			 GameResource.mSelectCalculationCount=1;
+		 }
 		if(GameResource.mLevelTask==GameResource.mSelectAnswerTask){
 			GameResource.mMainHandler.sendEmptyMessage(YouWin);
 		}else{
@@ -467,7 +474,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 			 GameResource.mSelectCalculationCount=0;
 		  }else if(GameResource.mAlgorithState==AlgorithState.Multiply){
 			 GameResource.mSelectCalculationCount=1;
-		  }	 
+		 }	 
 	}
 	
 }
