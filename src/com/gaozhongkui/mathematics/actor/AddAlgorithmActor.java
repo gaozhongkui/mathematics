@@ -14,6 +14,7 @@ public class AddAlgorithmActor extends BaseActor {
 		mTexture=new BaseTexture("data/images/add.png");
 		mCheckTexture=new BaseTexture("data/images/checkmark.png");
 		setPosition(11, 86);
+		setSize(mTexture.getWidth(), mTexture.getHeight());
 	}
 
 	@Override

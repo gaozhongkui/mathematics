@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.gaozhongkui.mathematics.GameResource;
+import com.gaozhongkui.mathematics.actor.AlgorithmActor.AlgorithState;
 import com.gaozhongkui.mathematics.screen.MainScreen;
 import com.gaozhongkui.mathematics.widget.BaseActor;
 
@@ -54,7 +55,12 @@ public class DiceActor extends BaseActor {
 	    			   if(!isDown){
 	    				   isDown=true;
 	    				   mCacheTexture=GameResource.mBorderDigital;
-	    				   GameResource.mSelectCalculationCount+=  mFigure;
+	    				   if(GameResource.mAlgorithState==AlgorithState.Add){
+	    					   GameResource.mSelectCalculationCount+=  mFigure;
+	    				   }else if(GameResource.mAlgorithState==AlgorithState.Multiply){
+	    					   GameResource.mSelectCalculationCount*=  mFigure;
+	    				   }
+	    				   
 	    				   GameResource.mMainHandler.obtainMessage(GameResource.SelectDice, DiceActor.this).sendToTarget();
 	    			   }
 	    		   }

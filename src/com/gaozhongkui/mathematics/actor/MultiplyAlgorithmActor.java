@@ -14,6 +14,7 @@ public class MultiplyAlgorithmActor extends BaseActor {
 		mTexture=new BaseTexture("data/images/multiply.png");
 		mCheckTexture=new BaseTexture("data/images/checkmark.png");
 		setPosition(11, 12);
+		setSize(mTexture.getWidth(), mTexture.getHeight());
 	}
 
 	@Override
