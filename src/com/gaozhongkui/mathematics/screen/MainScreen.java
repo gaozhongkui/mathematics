@@ -86,6 +86,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	private void initGame(){
 		GameResource.mLevelCount=0;
 		GameResource.mFractionCount=0;
+		GameResource.mGameState=GameState.None;
 	}
     @SuppressLint("UseValueOf")
 	private void initHandler(){
@@ -125,26 +126,30 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 								GameResource.mMainHandler.sendEmptyMessage(GameOver);
 							}
 						}else{
-							if(mFristDiceActors.isEmpty()){
-									int j=0;
-									for(j=0;j<InitColumnCount;j++){
-										int figure=MathUtils.random(1, getLevelCountToRange());
-										DiceActor diceActor=new DiceActor(figure, j);
-										Message message=GameResource.mMainHandler.obtainMessage();
-										message.what=GameResource.STARTGAME;
-										message.obj=diceActor;
+							if (mFristDiceActors.isEmpty()) {
+								int j = 0;
+								for (j = 0; j < InitColumnCount; j++) {
+									if (GameResource.mGameState == GameState.None) {
+										int figure = MathUtils.random(1,getLevelCountToRange());
+										DiceActor diceActor = new DiceActor(figure, j);
+										Message message = GameResource.mMainHandler.obtainMessage();
+										message.what = GameResource.STARTGAME;
+										message.obj = diceActor;
 										message.sendToTarget();
 										SystemClock.sleep(STARTPAUSETIME);
 									}
-									if(j>=InitColumnCount){
-										for(j=0;j<InitColumnCount;j++){
-											Message message=GameResource.mMainHandler.obtainMessage();
-											message.what=RUNDICEACTOR;
-											message.arg1=j;
+								}
+								if (j >= InitColumnCount) {
+									for (j = 0; j < InitColumnCount; j++) {
+										if (GameResource.mGameState == GameState.None) {
+											Message message = GameResource.mMainHandler.obtainMessage();
+											message.what = RUNDICEACTOR;
+											message.arg1 = j;
 											message.sendToTarget();
 										}
 									}
 								}
+							}		
 							}
 					
 					}
@@ -239,7 +244,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
     	resetScreen();
     }
     private void startGuideScreen(){
-    	startScreen(new GuideScreen());
+    	startScreen(GameResource.mGuideScreen);
     }
     /** ¶ÔµÄ **/
     public static void SelectAnswerRight(){
@@ -248,6 +253,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		}
     	GameResource.mSelectAnswerTask++;
     	GameResource.mFractionCount+=mSelectDiceActors.size()*10;
+    	GameResource.mCreenLevelFractionCount+=mSelectDiceActors.size()*10;
 		mSelectDiceActors.clear();
 		GameResource.mSelectCalculationCount=0;
 		
@@ -384,6 +390,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 		clearHandler();
 	}
 	private void showFailed(){
+		GameResource.mFractionCount-=GameResource.mCreenLevelFractionCount;
 		mGirlActor.setmGirlState(GirlState.Failed);
 		GameResource.isClick=false;
 		GameResource.mGameState=GameState.Failed;
@@ -405,22 +412,21 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener {
 	}
 	
 	private void clearHandler(){
-		GameResource.mMainHandler.sendEmptyMessageDelayed(PreparationMusic, 10);
-		GameResource.mMainHandler.removeMessages(GameResource.STARTGAME);
-		GameResource.mHandler.removeMessages(GameResource.STARTGAME);
-		GameResource.mMainHandler.removeMessages(RUNDICEACTOR);
-		GameResource.mMainHandler.removeMessages(GirlStateJudge);
-		GameResource.mHandler.removeMessages(RUNDICEACTOR);
-		GameResource.mHandler.removeMessages(GameResource.NEXTLINE);	
+		GameResource.mMainHandler.removeCallbacksAndMessages(null);
+		GameResource.mHandler.removeCallbacksAndMessages(null);
 	}
 	private void resetScreen(){
 		clearHandler();
+		GameResource.mMainHandler.sendEmptyMessageDelayed(PreparationMusic, 10);
 		GameResource.mBackGroudMusic.play();
+		GameResource.mGameState=GameState.None;
 		mGirlActor.setmGirlState(GirlState.Thinking);
 		mGirlActor.hideNumber();
-		GameResource.mGameState=GameState.None;
 		GameResource.isClick=false;
+		GameResource.mSelectAnswerTask=0;
 		GameResource.mCalculationCount=0;
+		GameResource.mSelectCalculationCount=0;
+		GameResource.mCreenLevelFractionCount=0;
 		mFristDiceActors.clear();
 		mSelectDiceActors.clear();
 		mDiceStage.clear();

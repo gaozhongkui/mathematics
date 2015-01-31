@@ -5,6 +5,7 @@ import android.os.Handler;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.gaozhongkui.mathematics.screen.GuideScreen;
 import com.gaozhongkui.mathematics.screen.MainScreen;
 import com.gaozhongkui.mathematics.screen.MainScreen.GameState;
 
@@ -18,10 +19,11 @@ public class GameResource {
 	public static final int STARTGAME=1026;
 	public static int        mLevelCount=0; /**关卡 **/
 	public static int        mFractionCount=0; /**积分 **/
+	public static int        mCreenLevelFractionCount=0;  /** 当前关卡积分 **/
 	public static int        mLevelTask=0; /**任务 **/
 	public static int        mCalculationCount=0;   /** 计算总额 **/
 	public static int        mSelectCalculationCount=0;
-	public static int        mSelectAnswerTask=0;
+	public static int        mSelectAnswerTask=0;     /** 选择的积分 **/
 	public static boolean      isClick;
 	public static Handler       mHandler;
 	public static  Handler       mMainHandler;
@@ -39,5 +41,6 @@ public class GameResource {
     public static  Sound      mWinGroudMusic;   //赢
     public static  boolean    initMainScreen;
     public static MainScreen  mMainScreen;
+    public static GuideScreen mGuideScreen;
 
 }

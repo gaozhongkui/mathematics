@@ -56,7 +56,15 @@ public class LittleGirlActor extends BaseActor {
 	@Override
 	protected void drawChild(Batch batch, float parentAlpha) {
         if(mCacheTexture!=null){
-        	batch.draw(mCacheTexture, getX(), getY());
+        	 if(mGirlState==GirlState.Thinking){
+        		 batch.draw(mCacheTexture, getX(), getY());
+        	 }else if(mGirlState==GirlState.Striving){
+        		 batch.draw(mCacheTexture, getX()-6, getY());
+        	 }else if(mGirlState==GirlState.Failed){
+        		 batch.draw(mCacheTexture, getX()+3, getY());
+        	 }else if(mGirlState==GirlState.Win){
+        		 batch.draw(mCacheTexture, getX()+3, getY());
+        	 }
         	if(isShowNumber){
         		batch.draw(mDialog, 227, 215);
         		batch.draw(mShowNumber[0], 232, SHOWNUMBERY);

@@ -29,8 +29,8 @@ public class Dialog extends BasePrompterActor {
 		setSize(mTexture.getWidth(), mTexture.getHeight());
 		setPosition(getScreenWidth()/2-getWidth()/2, getScreenHeight()/2-getHeight()/2);
 		mStage.addActor(this);
-		mAgain=new BaseButton("data/images/again.png", "data/images/again.png");
-		mContinue=new BaseButton("data/images/continue.png", "data/images/continue.png");
+		mAgain=new BaseButton("data/images/continue.png", "data/images/continue.png");
+		mContinue=new BaseButton("data/images/again.png", "data/images/again.png");
 		mStage.addActor(mAgain);
 		mStage.addActor(mContinue);
 		mAgain.setPosition(getX()+43, getY()+46);

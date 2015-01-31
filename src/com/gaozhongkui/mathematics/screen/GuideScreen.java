@@ -92,7 +92,7 @@ public class GuideScreen extends BaseScreen {
 
 	@Override
 	public void hide() {
-       if(mBackgroud!=null){
+/*       if(mBackgroud!=null){
     	   mBackgroud.clear();
     	   mBackgroud.remove();
     	   mBackgroud=null;
@@ -107,7 +107,7 @@ public class GuideScreen extends BaseScreen {
     	   mIntroduceButton.remove();
     	   mIntroduceButton=null;
        }
-       clearScreen();
+       clearScreen();*/
 	}
 	
 
