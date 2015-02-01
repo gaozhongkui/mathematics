@@ -53,7 +53,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
     private WinPrompterActor       mWinPrompterActor;
     private FailedPrompterActor    mFailedPrompterActor;
     private AlgorithmActor         mAlgorithmActor;
-    private boolean isSendOver;
     private Stage  mDiceStage;
     private HandlerThread mHandlerThread=new HandlerThread("gaozhongkui");
 	@Override
@@ -117,44 +116,30 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 	                    if(actor!=null){
 	                    	 mFristDiceActors.remove(actor);
 						}
-						boolean pand=false;
-						for(int i=0;i<GameResource.mDiceActors[0].length;i++){
-							if(GameResource.mDiceActors[i][0]){
-								pand=true;
-								break;
+	                	if (mFristDiceActors.isEmpty()) {
+							int j = 0;
+							for (j = 0; j < InitColumnCount; j++) {
+								if (GameResource.mGameState == GameState.None) {
+									int figure = MathUtils.random(1,getLevelCountToRange());
+									DiceActor diceActor = new DiceActor(figure, j);
+									Message message = GameResource.mMainHandler.obtainMessage();
+									message.what = GameResource.STARTGAME;
+									message.obj = diceActor;
+									message.sendToTarget();
+									SystemClock.sleep(STARTPAUSETIME);
+								}
 							}
-						}
-						if(pand){
-							if(!isSendOver){
-								isSendOver=true;
-								GameResource.mMainHandler.sendEmptyMessage(GameOver);
-							}
-						}else{
-							if (mFristDiceActors.isEmpty()) {
-								int j = 0;
+							if (j >= InitColumnCount) {
 								for (j = 0; j < InitColumnCount; j++) {
 									if (GameResource.mGameState == GameState.None) {
-										int figure = MathUtils.random(1,getLevelCountToRange());
-										DiceActor diceActor = new DiceActor(figure, j);
 										Message message = GameResource.mMainHandler.obtainMessage();
-										message.what = GameResource.STARTGAME;
-										message.obj = diceActor;
+										message.what = RUNDICEACTOR;
+										message.arg1 = j;
 										message.sendToTarget();
-										SystemClock.sleep(STARTPAUSETIME);
 									}
 								}
-								if (j >= InitColumnCount) {
-									for (j = 0; j < InitColumnCount; j++) {
-										if (GameResource.mGameState == GameState.None) {
-											Message message = GameResource.mMainHandler.obtainMessage();
-											message.what = RUNDICEACTOR;
-											message.arg1 = j;
-											message.sendToTarget();
-										}
-									}
-								}
-							}		
 							}
+						}	
 					
 					}
 					
@@ -185,17 +170,25 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
     					mSelectDiceActors.add(actor);
     				}else if(GameOver==arg0.what){
     					GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
-    					isSendOver=false;
     					showFailed();
     				}else if(YouWin==arg0.what){
     					showWin();
     				}else if(GirlStateJudge==arg0.what){
+						boolean pand=false;
     					boolean isStriving=false;
     					for(int i=0;i<GameResource.mDiceActors[0].length;i++){
-    					  if(GameResource.mDiceActors[i][3]){
-							isStriving=true;
-						  }
+    						if(GameResource.mDiceActors[i][0]){
+								pand=true;
+								break;
+							}
+    					   if(GameResource.mDiceActors[i][3]){
+							 isStriving=true;
+							break;
+						   }
     					}
+    					if(pand){
+							GameResource.mMainHandler.sendEmptyMessage(GameOver);
+						}
     					if(isStriving){
 							if(mGirlActor.getmGirlState()!=GirlState.Striving){
 								mGirlActor.setmGirlState(GirlState.Striving);
