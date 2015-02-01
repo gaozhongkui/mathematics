@@ -24,17 +24,15 @@ public class GuideScreen extends BaseScreen {
 			mBackgroudStage.addActor(mStartButton);
 			mBackgroudStage.addActor(mIntroduceButton);
 			initListener();
-			initValue();	
+			initValue();
+				
 	}
 	private void initListener(){
 		mStartButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				super.clicked(event, x, y);
-				if(GameResource.mMainScreen==null){
-					GameResource.mMainScreen=new MainScreen();
-				}
-				startScreen(GameResource.mMainScreen);
+				startScreen(new MainScreen());
 			}
 		});
 		mIntroduceButton.addListener(new ClickListener(){
@@ -64,12 +62,27 @@ public class GuideScreen extends BaseScreen {
 			if(GameResource.mError==null){
 				GameResource.mError=new BaseTexture("data/images/dice/error.png");
 			}
-		  GameResource.mBackGroudMusic=Gdx.audio.newMusic(Gdx.files.internal("data/sounds/backgroud.mp3"));
-		  GameResource.mPreparationMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/preparation.mp3"));
-		  GameResource.mEliminateFailedMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/eliminatefailed.mp3"));
-		  GameResource.mEliminateMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/eliminate.mp3"));
-		  GameResource.mFailedMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/failed.mp3"));
-		  GameResource.mWinGroudMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/win.mp3"));
+			if(GameResource.mBackGroudMusic==null){
+				 GameResource.mBackGroudMusic=Gdx.audio.newMusic(Gdx.files.internal("data/sounds/backgroud.mp3"));
+			}
+		 
+			if(GameResource.mPreparationMusic==null){
+				 GameResource.mPreparationMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/preparation.mp3"));
+			}
+		 
+			if(GameResource.mEliminateFailedMusic==null){
+				 GameResource.mEliminateFailedMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/eliminatefailed.mp3"));
+			}
+		   if(GameResource.mEliminateMusic==null){
+			   GameResource.mEliminateMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/eliminate.mp3"));
+		   }
+		  if(GameResource.mFailedMusic==null){
+			  GameResource.mFailedMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/failed.mp3"));
+		  }
+		  if( GameResource.mWinGroudMusic==null){
+			  GameResource.mWinGroudMusic=Gdx.audio.newSound(Gdx.files.internal("data/sounds/win.mp3")); 
+		  }
+		  
 	   }
 	@Override
 	protected void draw(float delta) {
@@ -78,34 +91,25 @@ public class GuideScreen extends BaseScreen {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void hide() {
-       if(mBackgroud!=null){
-    	   mBackgroud.clear();
-    	   mBackgroud.remove();
-    	   mBackgroud=null;
-       }
-       if(mStartButton!=null){
-    	   mStartButton.clear();
-    	   mStartButton.remove();
-    	   mStartButton=null;
-       }
-       if(mIntroduceButton!=null){
-    	   mIntroduceButton.clear();
-    	   mIntroduceButton.remove();
-    	   mIntroduceButton=null;
-       }
-       clearScreen();
+		if(mStartButton!=null){
+			mStartButton.remove();
+			mStartButton=null;
+		}
+		if(mIntroduceButton!=null){
+			mIntroduceButton.remove();
+			mIntroduceButton=null;
+		}
+		  clearScreen();
 	}
 	
 

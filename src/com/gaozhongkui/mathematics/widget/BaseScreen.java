@@ -18,7 +18,7 @@ public abstract class BaseScreen implements Screen {
 	protected Stage mBackgroudStage;
 	/** »ÀŒÔ≤„ **/
 	protected Stage mForegroundStage;
-	protected Viewport mViewport;
+	protected  Viewport mViewport;
 	protected InputMultiplexer mInputMultiplexer;
     private long startTime;
     protected  Image mBackgroud;
@@ -45,6 +45,7 @@ public abstract class BaseScreen implements Screen {
 		draw(delta);
 		mForegroundStage.act();
 		mForegroundStage.draw();
+		
 	}
 
 	protected abstract void draw(float delta);
@@ -78,6 +79,16 @@ public abstract class BaseScreen implements Screen {
 		
 	}
 	protected void clearScreen(){
+		if(mBackgroud!=null){
+			mBackgroud.remove();
+			mBackgroud=null;
+		}
+		if(mInputMultiplexer!=null){
+			mInputMultiplexer=null;
+		}
+		if(mViewport!=null){
+			mViewport=null;
+		}
 		if(mBackgroudStage!=null){
 			mBackgroudStage.dispose();
 			mBackgroudStage=null;

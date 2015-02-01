@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.gaozhongkui.mathematics.actor.AlgorithmActor.AlgorithState;
-import com.gaozhongkui.mathematics.screen.MainScreen;
 import com.gaozhongkui.mathematics.screen.MainScreen.GameState;
 
 public class GameResource {
@@ -39,8 +38,7 @@ public class GameResource {
     public static  Sound      mFailedMusic;     //Ê§°Ü
     public static  Sound      mPreparationMusic; //×¼±¸
     public static  Sound      mWinGroudMusic;   //Ó®
-    public static  boolean    initMainScreen;
-    public static MainScreen  mMainScreen;
     public static AlgorithState mAlgorithState;
+    public static boolean isFristApp;
 
 }

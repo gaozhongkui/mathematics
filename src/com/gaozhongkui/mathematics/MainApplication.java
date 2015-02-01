@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.gaozhongkui.mathematics.utils.GameUtils;
@@ -17,6 +18,7 @@ public class MainApplication extends AndroidApplication {
 	public static final int SCREENHEIGHT = 480;
     private static final String AppId="85aa56a59eac8b3d";
     private static final String AppSecret="a14006f66f58d5d7";
+    private static final String isFristUseApp="fristuseapp";
     private AlertDialog.Builder  mAlertDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class MainApplication extends AndroidApplication {
 		SpotManager.getInstance(this).setAnimationType(SpotManager.ANIM_ADVANCE);
 		// 设置插屏动画的横竖屏展示方式，如果设置了横屏，则在有广告资源的情况下会是优先使用横屏图。
 		SpotManager.getInstance(this).setSpotOrientation(SpotManager.ORIENTATION_LANDSCAPE);
+		GameResource.isFristApp=Gdx.app.getPreferences("isFristUseApp").getBoolean(isFristUseApp, true);
 		mAlertDialog=new AlertDialog.Builder(this);
 		mAlertDialog.setTitle("提示");
 		mAlertDialog.setMessage("你真的要退出吗？");
@@ -48,7 +51,6 @@ public class MainApplication extends AndroidApplication {
 	}
 
 	private void exitApp(){
-		GameResource.mMainScreen=null;
 		finish();
 	}
 	@Override
@@ -56,6 +58,7 @@ public class MainApplication extends AndroidApplication {
 		super.onDestroy();
 		SpotManager.getInstance(this).onDestroy();
 		PowerManagerUtils.getInstance().releaseWakeLock();
+		Gdx.app.getPreferences("isFristUseApp").putBoolean(isFristUseApp, false).flush();
 	}
 	
 	@Override
