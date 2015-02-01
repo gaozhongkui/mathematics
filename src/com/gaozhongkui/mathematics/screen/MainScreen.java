@@ -346,26 +346,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 	private void nextLevel(){
 		GameResource.mLevelCount++;
 		if(GameResource.mLevelCount==1){
-			GameResource.mLevelTask=2;
-		}else if(GameResource.mLevelCount==2){
-			GameResource.mLevelTask=6;
-		}else if(GameResource.mLevelCount==3){
-			GameResource.mLevelTask=10;
-		}else if(GameResource.mLevelCount==4){
-			GameResource.mLevelTask=10;
-		}else if(GameResource.mLevelCount==5){
-			GameResource.mLevelTask=10;
-		}else if(GameResource.mLevelCount==6){
-			GameResource.mLevelTask=10;
-		}else if(GameResource.mLevelCount==7){
-			GameResource.mLevelTask=10;
-		}else {
-			GameResource.mLevelTask=10;
-		}
-		
-		
-		
-		/*if(GameResource.mLevelCount==1){
 			GameResource.mLevelTask=30;
 		}else if(GameResource.mLevelCount==2){
 			GameResource.mLevelTask=40;
@@ -381,7 +361,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 			GameResource.mLevelTask=90;
 		}else if(GameResource.mLevelCount==8){
 			GameResource.mLevelTask=100;
-		}*/
+		}
 	}
 	@Override
 	protected void draw(float delta) {
