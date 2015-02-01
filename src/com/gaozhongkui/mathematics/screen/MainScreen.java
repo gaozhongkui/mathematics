@@ -170,7 +170,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
     					DiceActor actor=(DiceActor) arg0.obj;
     					mSelectDiceActors.add(actor);
     				}else if(GameOver==arg0.what){
-    					GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
+    					GameResource.mMainHandler.sendEmptyMessage(ShowAdvertisement);
     					showFailed();
     				}else if(YouWin==arg0.what){
     					showWin();
