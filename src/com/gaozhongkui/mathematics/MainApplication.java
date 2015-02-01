@@ -51,7 +51,8 @@ public class MainApplication extends AndroidApplication {
 	}
 
 	private void exitApp(){
-		finish();
+		Gdx.app.exit();
+		System.exit(0);
 	}
 	@Override
 	protected void onDestroy() {
