@@ -51,15 +51,15 @@ public class MainApplication extends AndroidApplication {
 	}
 
 	private void exitApp(){
+		SpotManager.getInstance(this).onDestroy();
+		PowerManagerUtils.getInstance().releaseWakeLock();
+		Gdx.app.getPreferences("isFristUseApp").putBoolean(isFristUseApp, false).flush();
 		Gdx.app.exit();
 		System.exit(0);
 	}
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		SpotManager.getInstance(this).onDestroy();
-		PowerManagerUtils.getInstance().releaseWakeLock();
-		Gdx.app.getPreferences("isFristUseApp").putBoolean(isFristUseApp, false).flush();
 	}
 	
 	@Override
