@@ -205,23 +205,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 								mGirlActor.setmGirlState(GirlState.Thinking);
 							}
 						}
-    				}else if(ShowAdvertisement==arg0.what){
-    					SpotManager.getInstance(GameUtils.getInstance().getContext()).loadSpotAds();
-    					SpotManager.getInstance(GameUtils.getInstance().getContext()).showSpotAds(GameUtils.getInstance().getContext(), new SpotDialogListener() {
-    						@Override
-    						public void onShowSuccess() {
-    						}
-
-    						@Override
-    						public void onShowFailed() {
-    							GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
-    						}
-
-    						@Override
-    						public void onSpotClosed() {
-    						}
-
-    					});
     				}else if(PreparationMusic==arg0.what){
     					GameResource.mPreparationMusic.play();
     				}
@@ -231,6 +214,23 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 					initContinueLevel();
 				}else if(GameResource.AgainMake==arg0.what){
 					startGuideScreen();
+				}else if(ShowAdvertisement==arg0.what){
+					SpotManager.getInstance(GameUtils.getInstance().getContext()).loadSpotAds();
+					SpotManager.getInstance(GameUtils.getInstance().getContext()).showSpotAds(GameUtils.getInstance().getContext(), new SpotDialogListener() {
+						@Override
+						public void onShowSuccess() {
+						}
+
+						@Override
+						public void onShowFailed() {
+							GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
+						}
+
+						@Override
+						public void onSpotClosed() {
+						}
+
+					});
 				}
     				return false;
     			}
