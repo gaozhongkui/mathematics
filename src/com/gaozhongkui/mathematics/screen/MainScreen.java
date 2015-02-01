@@ -184,9 +184,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
     					DiceActor actor=(DiceActor) arg0.obj;
     					mSelectDiceActors.add(actor);
     				}else if(GameOver==arg0.what){
-    					if(!GameResource.isFristApp){
-    						GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
-    					}
+    					GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
     					isSendOver=false;
     					showFailed();
     				}else if(YouWin==arg0.what){
@@ -208,6 +206,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 							}
 						}
     				}else if(ShowAdvertisement==arg0.what){
+    					SpotManager.getInstance(GameUtils.getInstance().getContext()).loadSpotAds();
     					SpotManager.getInstance(GameUtils.getInstance().getContext()).showSpotAds(GameUtils.getInstance().getContext(), new SpotDialogListener() {
     						@Override
     						public void onShowSuccess() {
