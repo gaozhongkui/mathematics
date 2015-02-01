@@ -170,7 +170,6 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
     					DiceActor actor=(DiceActor) arg0.obj;
     					mSelectDiceActors.add(actor);
     				}else if(GameOver==arg0.what){
-    					GameResource.mMainHandler.sendEmptyMessage(ShowAdvertisement);
     					showFailed();
     				}else if(YouWin==arg0.what){
     					showWin();
@@ -210,26 +209,30 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 				}else if(GameResource.AgainMake==arg0.what){
 					startGuideScreen();
 				}else if(ShowAdvertisement==arg0.what){
-					SpotManager.getInstance(GameUtils.getInstance().getContext()).loadSpotAds();
-					SpotManager.getInstance(GameUtils.getInstance().getContext()).showSpotAds(GameUtils.getInstance().getContext(), new SpotDialogListener() {
-						@Override
-						public void onShowSuccess() {
-						}
-
-						@Override
-						public void onShowFailed() {
-							GameResource.mMainHandler.sendEmptyMessageDelayed(ShowAdvertisement, 10);
-						}
-
-						@Override
-						public void onSpotClosed() {
-						}
-
-					});
+					showAdvertisement();
 				}
     				return false;
     			}
     		});
+    }
+    
+    private void showAdvertisement(){
+    	SpotManager.getInstance(GameUtils.getInstance().getContext()).loadSpotAds();
+		SpotManager.getInstance(GameUtils.getInstance().getContext()).showSpotAds(GameUtils.getInstance().getContext(), new SpotDialogListener() {
+			@Override
+			public void onShowSuccess() {
+			}
+
+			@Override
+			public void onShowFailed() {
+				showAdvertisement();
+			}
+
+			@Override
+			public void onSpotClosed() {
+			}
+
+		});
     }
     private void initContinueLevel(){
     	GameResource.mFractionCount-=GameResource.mCreenLevelFractionCount;
@@ -394,6 +397,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 		hideFailed();
 	}
 	private void showWin(){
+		clearHandler();
 		mGirlActor.setmGirlState(GirlState.Win);
 		GameResource.isClick=false;
 		GameResource.mGameState=GameState.Win;
@@ -402,9 +406,9 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 		mWinPrompterActor.setVisible(true);
 		hideWelcome();
 		hideFailed();
-		clearHandler();
 	}
 	private void showFailed(){
+		clearHandler();
 		mGirlActor.setmGirlState(GirlState.Failed);
 		GameResource.isClick=false;
 		GameResource.mGameState=GameState.Failed;
@@ -413,7 +417,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 		mFailedPrompterActor.setVisible(true);	
 		hideWelcome();
 		hideWin();
-		clearHandler();
+		showAdvertisement();
 	}
 	private void hideWelcome(){
 		mPrompterActor.setVisible(false);
