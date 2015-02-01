@@ -53,6 +53,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
     private WinPrompterActor       mWinPrompterActor;
     private FailedPrompterActor    mFailedPrompterActor;
     private AlgorithmActor         mAlgorithmActor;
+    private boolean isGameOver;
     private Stage  mDiceStage;
     private HandlerThread mHandlerThread=new HandlerThread("gaozhongkui");
 	@Override
@@ -186,7 +187,8 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 							break;
 						   }
     					}
-    					if(pand){
+    					if(pand&&!isGameOver){
+    						isGameOver=true;
 							GameResource.mMainHandler.sendEmptyMessage(GameOver);
 						}
     					if(isStriving){
@@ -434,6 +436,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
 		GameResource.mGameState=GameState.None;
 		mGirlActor.setmGirlState(GirlState.Thinking);
 		mGirlActor.hideNumber();
+		isGameOver=false;
 		GameResource.isClick=false;
 		GameResource.mSelectAnswerTask=0;
 		GameResource.mCalculationCount=0;
