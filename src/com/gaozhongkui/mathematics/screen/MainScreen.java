@@ -166,7 +166,7 @@ public class MainScreen extends BaseScreen  implements StartWelcomeListener ,Swi
     			
     			@Override
     			public boolean handleMessage(Message arg0) {
-    			if(GameResource.mGameState==GameState.None){
+    			if(GameResource.mGameState==GameState.None&&arg0.what!=ShowAdvertisement){
     				if(GameResource.STARTGAME==arg0.what){              //Ìí¼Ó
     					 DiceActor diceActor=(DiceActor) arg0.obj;
     					 mDiceStage.addActor(diceActor); 
